@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --config webpack.config.js"
+    "start": "webpack serve --config webpack.config.js --mode=development --open",
+    "watch:css": "TAILWIND_MODE=watch postcss src/assets/tailwind.css -o src/assets/main.css --watch"
   },
   "repository": {
     "type": "git",
@@ -21,17 +22,25 @@
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "autoprefixer": "^9.8.6",
     "babel-loader": "^8.2.3",
     "babel-preset-react": "^6.24.1",
-    "css-loader": "^6.6.0",
+    "css-loader": "^6.7.0",
     "html-webpack-plugin": "^5.5.0",
+    "postcss": "^8.4.7",
+    "postcss-cli": "^9.1.0",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.4.2",
     "style-loader": "^3.3.1",
-    "webpack": "^5.69.1",
+    "tailwindcss": "^3.0.23",
+    "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
+    "postcss-import": "^14.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }
