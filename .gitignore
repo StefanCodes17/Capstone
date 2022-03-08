@@ -1,4 +1,7 @@
 .DS_STORE
+api/Pipfile
+api/Pipfile.lock
+capstone
 node_modules
 scripts/flow/*/.flowconfig
 .flowconfig

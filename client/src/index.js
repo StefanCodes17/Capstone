@@ -5,8 +5,6 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from './pages/Home';
 
 import './assets/main.css'
-
-
 const App = () => {
     return (
         <BrowserRouter>
