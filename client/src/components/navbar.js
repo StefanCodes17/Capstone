@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 
 const Navbar = () => {
 	return (
@@ -6,10 +7,12 @@ const Navbar = () => {
 			<div className="container flex flex-wrap justify-between items-center mx-auto">
 				<a className="flex items-center" href="#">
 					{/*<img alt="Flowbite Logo" className="mr-3 h-6 sm:h-10" src="/docs/images/logo.svg"/> */}
-					<span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">LifePad</span>
+					<span className="self-center text-xl font-semibold whitespace-nowrap text-white">LifePad</span>
 				</a>
 				<div className="flex md:order-2">
-					<button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sign In</button>
+					<Link to="/signup" >
+						<button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sign In</button>
+					</Link>
 				</div>
 				<div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
 					<ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">

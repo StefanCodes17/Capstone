@@ -5,7 +5,7 @@ import Main from '../components/Main'
 const HomePage = () => {
 	return (
 		<div className="bg-primary_color h-screen">
-			<Navbar /> 
+			<Navbar />
 			<Main/>
 		</div>
 	);
