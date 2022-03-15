@@ -457,9 +457,36 @@ Ensure the default browser behavior of the `hidden` attribute.
     max-width: 1536px;
   }
 }
+.absolute {
+  position: absolute;
+}
+.bottom-5 {
+  bottom: 1.25rem;
+}
+.left-10 {
+  left: 2.5rem;
+}
+.-bottom-24 {
+  bottom: -6rem;
+}
+.right-14 {
+  right: 3.5rem;
+}
+.z-10 {
+  z-index: 10;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+.ml-10 {
+  margin-left: 2.5rem;
+}
+.mt-16 {
+  margin-top: 4rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
 }
 .mr-3 {
   margin-right: 0.75rem;
@@ -479,8 +506,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-6 {
   height: 1.5rem;
 }
+.h-screen {
+  height: 100vh;
+}
 .w-full {
   width: 100%;
+}
+.max-w-sm {
+  max-width: 24rem;
+}
+.max-w-lg {
+  max-width: 32rem;
 }
 .flex-col {
   flex-direction: column;
@@ -517,9 +553,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
-.bg-red-200 {
+.bg-primary_color {
   --tw-bg-opacity: 1;
-  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+  background-color: rgb(35 35 35 / var(--tw-bg-opacity));
 }
 .bg-blue-700 {
   --tw-bg-opacity: 1;
@@ -550,6 +586,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-center {
   text-align: center;
 }
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -564,9 +604,19 @@ Ensure the default browser behavior of the `hidden` attribute.
 .font-medium {
   font-weight: 500;
 }
+.leading-6 {
+  line-height: 1.5rem;
+}
+.leading-4 {
+  line-height: 1rem;
+}
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 .text-gray-700 {
   --tw-text-opacity: 1;
