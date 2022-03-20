@@ -52,3 +52,23 @@ A notion-like text-editor that enables:
   </ul>
   Make your way to the localhost instance and begin deving
 </ol>
+
+### Setting up the backend
+
+1. Open a terminal in the root of the project
+2. If this is your first time running the project, you need to create the virtual environment
+```
+$ python -m venv capstone
+$ chmod u+x capstone/bin/activate
+```
+3. Activate it with `$ ./capstone/bin/activate`
+4. Your terminal will now have a `(capstone)` prefix
+5. If this is your first time installing the project, you need to install the required libraries
+```
+$ pip3 install -r requirements.txt
+```
+6. Now start the server:
+```
+$ python3 api/manage.py runserver
+```
+
