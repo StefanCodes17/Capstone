@@ -1,12 +1,18 @@
+# Misc
 .DS_STORE
+
+# Python
 api/Pipfile
 api/Pipfile.lock
 capstone
+*.pyc
+__pycache__/
+
+# Node
 node_modules
 scripts/flow/*/.flowconfig
 .flowconfig
 *~
-*.pyc
 .grunt
 _SpecRunner.html
 __benchmarks__
