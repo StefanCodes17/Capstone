@@ -1,16 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
 
 const Navbar = () => {
+
+	const [counter, setCounter] = useState(0)
+
 	return (
 		<nav className="bg-primary_color border-gray-200 px-2 sm:px-4 py-2.5">
-			<div className="container flex flex-wrap justify-between items-center mx-auto">
-				<a className="flex items-center" href="#">
-					{/*<img alt="Flowbite Logo" className="mr-3 h-6 sm:h-10" src="/docs/images/logo.svg"/> */}
-					<span className="self-center text-xl font-semibold whitespace-nowrap text-white">LifePad</span>
-				</a>
+			<div className="container flex flex-wrap justify-between items-center mx-auto">	
+				<Link to="/">
+					<div className="self-center text-xl font-semibold whitespace-nowrap text-white">
+						LifePad
+					</div>
+				</Link>
 				<div className="flex md:order-2">
-					<Link to="/signup" >
+					<Link to="signup" >
 						<button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sign In</button>
 					</Link>
 				</div>

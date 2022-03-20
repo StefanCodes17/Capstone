@@ -34,6 +34,9 @@ output: {
 },
 devServer: {
   historyApiFallback: true,
+  hot: true
 },
- plugins: [htmlPlugin]
+ plugins: [
+   htmlPlugin,
+  ]
 };

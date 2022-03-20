@@ -1,4 +1,7 @@
 import React, {useState} from 'react'
+import {Link } from 'react-router-dom'
+import {useDispatch} from "react-redux" 
+import {signup} from "../state/slices/userSlice"
 
 const Signup = () => {
 
@@ -9,19 +12,30 @@ const Signup = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
+  const dispatch = useDispatch()
+
   const handleSubmit = (e) =>{
     e.preventDefault()
+    
+    dispatch(signup({
+      username,
+      email,
+      password,
+      isLoggedIn: true
+    }))
   }
 
 
   return (
     <div className="relative max-w-4xl m-auto">
         <div className="px-5 py-5 m-auto max-w-sm">
-          <div className="flex items-center py-2 px-4 absolute top-5 left-5 m-auto">
-            Logo
-          </div>
+          <Link to="/">
+            <div className="flex items-center py-2 px-4 absolute top-5 left-5 m-auto cursor-pointer">
+              LifePad
+            </div>
+          </Link>
           <div className=" px-8 py-10 mt-5">
-            <h1 className="font-semibold font-sans text-xl">Sign Up!!</h1>
+            <h1 className="font-semibold font-sans text-xl">Create an Account</h1>
             <form 
             onSubmit={handleSubmit}
             className="flex flex-col mt-6 max-w-xs m-auto"
@@ -40,21 +54,21 @@ const Signup = () => {
                 name="email"
                 className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
               </div>
-              {/*Email Field */}
+              {/*Username Field */}
               <label htmlFor="email" className="font-semibold text-sm mb-2">
                   Username
                 </label>
               <div className={`justify-center opacity-40 flex border border-gray-300 rounded focus:shadow items-center`} >
                <input 
                 required
-                value={email} 
+                value={username} 
                 onChange={(e) => setUsername(e.target.value)} 
                 type="text" 
                 id="username" 
                 name="username"
                 className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
               </div>
-              {/*Email Field */}
+              {/*Password Field */}
               <label htmlFor="email" className="font-semibold text-sm mb-2">
                   Password
                 </label>
@@ -68,7 +82,9 @@ const Signup = () => {
                 name="password"
                 className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
               </div>
-              <button type="submit" className="button mt-4">Sign In</button>
+              
+              <button type="submit"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2">Sign In</button>
             </form>
             {error && (
             <div className="bg-red-100 border-t-4 mt-3 border-red-600 rounded-b text-red-900 px-4 py-3 shadow-md" role="alert">
@@ -81,19 +97,18 @@ const Signup = () => {
               </div>
             </div>
             )}
-            <button className="cursor-pointer" onClick={() => {setError(!error)}}>
-              Show Error
-            </button>
             <div className="w-full flex items-center justify-between">
                 <hr className="mt-3 w-28"></hr> 
                 <p className="text-sm pt-1 text-gray-500">or</p>
                 <hr className="mt-3 w-28"></hr>
             </div>
-            <div>
-              <p 
-              className="text-sm text-gray-800 hover:underline underline-offset-2 cursor-pointer"
-              >Don&apos;t have an account? <span >Create one!</span></p>
-            </div>
+            <Link to="/login">
+              <div>
+                <p 
+                className="text-sm text-gray-800 hover:underline underline-offset-2 cursor-pointer"
+                >Have an account? <span >Log in!</span></p>
+              </div>
+            </Link>
           </div>
       </div>
     </div>
