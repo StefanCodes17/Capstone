@@ -8,6 +8,7 @@ import './assets/main.css'
 import Signup from './pages/Signup';
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import DocEditor from './components/DocEditor'
 
 import {Provider} from "react-redux"
 import store from "./state/app/store"
@@ -20,6 +21,7 @@ const App = () => {
                 <Route path="signup" element={<Signup/>}/> 
                 <Route path="login" element={<Login/>}></Route>
                 <Route path="dashboard" element={<Dashboard/>} />
+                <Route path="editor" element={<DocEditor/>} />
                 <Route path="*" element={<Navigate to="/"/>}></Route>
             </Routes>
         </Router>

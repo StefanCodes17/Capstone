@@ -6,14 +6,14 @@ const WordChange = ({words}) => {
     useEffect(() => {
         const interval = setInterval(()=>{
             setCurrentIndex((currentindex + 1) % words.length)
-        }, 3000)
+        }, 2000)
         return () => clearInterval(interval);
       }, [currentindex]);
 
   return (
-    <>
+    <span className='animate-fadeIn mx-3'>
         {words[currentindex]}
-    </>
+    </span>
   )
 }
 

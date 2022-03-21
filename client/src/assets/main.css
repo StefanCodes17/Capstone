@@ -494,6 +494,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-left: auto;
   margin-right: auto;
 }
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
 .mt-16 {
   margin-top: 4rem;
 }
@@ -551,29 +555,56 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-full {
   width: 100%;
 }
+.w-screen {
+  width: 100vw;
+}
 .w-6 {
   width: 1.5rem;
 }
 .w-28 {
   width: 7rem;
 }
-.max-w-screen-2xl {
-  max-width: 1536px;
-}
-.max-w-sm {
-  max-width: 24rem;
-}
 .max-w-lg {
   max-width: 32rem;
 }
+.max-w-screen-2xl {
+  max-width: 1536px;
+}
 .max-w-4xl {
   max-width: 56rem;
+}
+.max-w-sm {
+  max-width: 24rem;
 }
 .max-w-xs {
   max-width: 20rem;
 }
 .flex-grow {
   flex-grow: 1;
+}
+@-webkit-keyframes fadeIn {
+
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+.animate-fadeIn {
+  -webkit-animation: fadeIn 5s infinite;
+          animation: fadeIn 5s infinite;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -738,19 +769,16 @@ Ensure the default browser behavior of the `hidden` attribute.
 .font-bold {
   font-weight: 700;
 }
-.leading-8 {
-  line-height: 2rem;
-}
 .leading-4 {
   line-height: 1rem;
-}
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .text-gray-500 {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .text-gray-700 {
   --tw-text-opacity: 1;
