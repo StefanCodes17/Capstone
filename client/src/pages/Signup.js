@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import {Link } from 'react-router-dom'
 import {useDispatch} from "react-redux" 
 import {signup} from "../state/slices/userSlice"
+import { useNavigate } from "react-router-dom";
+
 
 const Signup = () => {
 
@@ -13,16 +15,19 @@ const Signup = () => {
   const [error, setError] = useState(false)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const handleSubmit = (e) =>{
     e.preventDefault()
-    
+
     dispatch(signup({
       username,
       email,
       password,
       isLoggedIn: true
     }))
+
+    navigate("/")
   }
 
 
