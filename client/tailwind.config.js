@@ -4,8 +4,8 @@ module.exports = {
   darkMode: 'media',
   theme: {
     extend: {
-          colors:{
-      primary_color: "rgb(35, 35, 35)",
+      colors:{
+        primary_color: "rgb(35, 35, 35)",
     },
     },
   },

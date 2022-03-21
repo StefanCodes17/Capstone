@@ -3,9 +3,10 @@ import Navbar from '../components/Navbar';
 import Main from '../components/Main'
 
 const HomePage = () => {
+
 	return (
-		<div className="bg-primary_color h-screen">
-			<Navbar /> 
+		<div className="bg-primary_color h-screen max-w-screen-2xl overflow-hidden">
+			<Navbar />
 			<Main/>
 		</div>
 	);

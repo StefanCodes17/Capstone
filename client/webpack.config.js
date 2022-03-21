@@ -32,5 +32,11 @@ output: {
     }
   ]
 },
- plugins: [htmlPlugin]
+devServer: {
+  historyApiFallback: true,
+  hot: true
+},
+ plugins: [
+   htmlPlugin,
+  ]
 };

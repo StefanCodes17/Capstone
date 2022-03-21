@@ -1,18 +1,33 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 
 import HomePage from './pages/Home';
 
 import './assets/main.css'
+import Signup from './pages/Signup';
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+
+import {Provider} from "react-redux"
+import store from "./state/app/store"
+
 const App = () => {
     return (
-        <BrowserRouter>
+        <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<HomePage />}/>
+                <Route path="signup" element={<Signup/>}/> 
+                <Route path="login" element={<Login/>}></Route>
+                <Route path="dashboard" element={<Dashboard/>} />
+                <Route path="*" element={<Navigate to="/"/>}></Route>
             </Routes>
-        </BrowserRouter>
+        </Router>
     );
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'))
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>
+, document.getElementById('root'))
