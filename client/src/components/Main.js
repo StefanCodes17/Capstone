@@ -6,7 +6,7 @@ const HeaderText = () =>{
   return(
       <div >
         <div className="text-5xl mt-16 mb-4">
-          <h1><p className='flex'>An <WordChange words={["Organized", "Improved"]}/> Life
+          <h1><p className='flex'>An <WordChange words={["Organized", "Improved", "Efficient"]}/> Life
           </p> With Life Pad</h1>
         </div>
           <p className="text-gray-500 leading-4 max-w-lg">Create accessible, user-friendly documnets that support markdown,
