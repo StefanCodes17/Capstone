@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def document_library(request):
@@ -24,3 +25,17 @@ def document_library(request):
 	},
 	]
 	return JsonResponse(data, safe=False)
+
+def login_route(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return HttpResponse("Logged in!")
+    else:
+        return HttpResponse("Wrong username or password")
+
+def logout_route(request):
+    logout(request)
+    return HttpResponse("Logged out")
