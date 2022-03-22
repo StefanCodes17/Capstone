@@ -2,16 +2,25 @@ import React from 'react'
 
 import WordChange from './WordChange'
 
+const HeaderText = () =>{
+  return(
+      <div >
+        <div className="text-5xl mt-16 mb-4">
+          <h1><p className='flex'>An <WordChange words={["Organized", "Improved", "Efficient"]}/> Life
+          </p> With Life Pad</h1>
+        </div>
+          <p className="text-gray-500 leading-4 max-w-lg">Create accessible, user-friendly documnets that support markdown,
+          programming languages, and utilize some state-of-the-art Machine 
+          Learning.</p>
+    </div>
+  )
+}
+
 const Main = () => {
 
   return (
     <div className="text-white place-items-center grid xl:block max-w-screen-2xl m-auto px-16">
-        <div>
-            <h1 className=" text-5xl leading-8 mt-16 mb-4 max-w-sm">An <WordChange words={["Organized", "Improved"]}/> Life With Life Pad</h1>
-            <p className="text-gray-500 leading-4 max-w-lg">Create accessible, user-friendly documnets that support markdown,
-programming languages, and utilize some state-of-the-art Machine 
-Learning.</p>
-        </div>
+        <HeaderText/>
         <div className="flex justify-between m-auto  pr-12">
           <div className="hidden xl:block relative w-full h-auto">
             <img src="./assets/personHomePage.svg" alt="image" width="360" className="absolute bottom-0 left-10 z-20"></img>
