@@ -6,6 +6,9 @@ module.exports = {
     extend: {
       colors:{
         primary_color: "rgb(35, 35, 35)",
+        sidebar_background_color: "#F7FFFC",
+        sidebar_newBtn_color: "#BEC2C1",
+        lifepad_green:"#2DDF9F",
       },
       keyframes: {
        // fadeIn: {
