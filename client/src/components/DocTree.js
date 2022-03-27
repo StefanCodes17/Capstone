@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Tree=({data=[]})=>{
+const Tree=()=>{
+
     return(
         <div>
-            <h2>Hi testing</h2>
+            Testing
         </div>
     )
 }
