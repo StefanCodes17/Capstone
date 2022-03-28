@@ -15,7 +15,7 @@ export default function Sidebar(){
         <>
             <Hamburger isOpen={isOpen} setIsOpen={setIsOpen}/>
             <div className={`bg-sidebar_background_color w-80 h-screen shadow-xl ${isOpen?'translate-x-0':'-translate-x-full'} ease-in-out duration-300 relative`}>
-                <p className="leading-10 text-left font-sans font-bold text-lifepad_black text-2xl truncate border-r-[40px] border-transparent">
+                <p className="pl-1 leading-10 text-left font-sans font-bold text-lifepad_black text-2xl truncate border-r-[40px] border-transparent">
                     Hi, {user?.username}
                     <Link to="/editor">
                         <button className="absolute right-0"> 
