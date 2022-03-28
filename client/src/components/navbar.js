@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
 import {useSelector} from "react-redux"
 import {getUser} from '../state/slices/userSlice'
+import {BsPersonCircle} from "react-icons/bs"
 
 const Navbar = () => {
-
+	const [showOptions,setShowOptions]=useState(false)
 	const [counter, setCounter] = useState(0)
 	const user = useSelector(getUser)
 
@@ -18,7 +19,19 @@ const Navbar = () => {
 				</Link>
 				<div className="flex md:order-2">
 					<Link to={!user?.isLoggedIn ? `signup` : `dashboard`} >
-						<button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">{!user?.isLoggedIn ? "Sign In" : "Dashboard"}</button>
+						{!user?.isLoggedIn ? (
+							<button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sign In</button>
+						):(
+							<button>
+								<BsPersonCircle
+								className='fill-lifepad_green l-0 h-10 w-10 relative'
+								// onClick={()=>setShowOptions(!showOptions)}
+								>
+								
+								</BsPersonCircle>
+							</button>
+						)}
+						
 					</Link>
 				</div>
 				<div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">

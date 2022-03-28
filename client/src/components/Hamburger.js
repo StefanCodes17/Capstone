@@ -5,7 +5,7 @@ import { login } from '../state/slices/userSlice'
 const Hamburger = ({isOpen, setIsOpen}) => {
   return (
       <>
-      <button className={`top-80 z-50 ${isOpen?'translate-x-80':''} ease-in-out duration-300 absolute`}>
+      <button className={`top-40 z-50 ${isOpen?'translate-x-80':''} ease-in-out duration-300 absolute`}>
         {!isOpen ?
             (
                 <svg 
