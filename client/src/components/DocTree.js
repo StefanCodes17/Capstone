@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Tree=({data=[]})=>{
+// folders=[
+//     filepathname: "path",
+//     documents:[{}]
+// ]
+// docs[
+//     "Data "
+// ]
+//TRY USING GRIDDDDDDD!!!!!
+const Tree=()=>{
+
     return(
         <div>
-            <h2>Hi testing</h2>
+            Testing
         </div>
     )
 }
