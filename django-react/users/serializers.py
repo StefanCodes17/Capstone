@@ -4,6 +4,19 @@ from .models import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 
+class UserSerializer(serializers.ModelSerializer):
+    password=serializers.CharField(max_length=68, min_length=6, write_only=True)
+
+    class Meta:
+        model= User
+        fields=[
+            'id',
+            'email',
+            'username',
+            'password'
+        ]
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password=serializers.CharField(max_length=68, min_length=6, write_only=True)
 

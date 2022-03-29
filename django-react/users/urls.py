@@ -4,7 +4,7 @@ from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 from . import views
 
 urlpatterns = [
-    #path('', views.UserListCreateAPIView.as_view(), name="create_users"),
+    path('', views.UserListCreateAPIView.as_view(), name="create_users"),
     #path('<int:pk>', views.UserDetailAPIView.as_view(), name="retrieve_users"),
     #path('<int:pk>/update', views.UserDetailAPIView.as_view(), name="upudate_users"),
     #path('documents', views.document_library, name='documents'),

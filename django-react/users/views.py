@@ -1,3 +1,4 @@
+from cgitb import lookup
 import email
 from re import A
 from rest_framework.response import Response
@@ -5,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 from .util import Util
@@ -41,27 +42,17 @@ from django.conf import settings
 # 	]
 # 	return Response(data, safe=False)
 
-# class UserListCreateAPIView(generics.ListCreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-#     def perform_create(self, serializer):
-#         name = serializer.validated_data.get('name')
-#         if content is None:
-#             content = ""
-#         serializer.save(name=name)
+class UserListCreateAPIView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-# class UserDetailAPIView(generics.RetrieveAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-# class Login(APIView):
-#     def post(self, request, *args, **kwargs):
-#         serializer = UserSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response(serializer.data)
+    def perform_create(self, serializer):
+        name = serializer.validated_data.get('name')
+        if content is None:
+            content = ""
+        serializer.save(name=name)
 
 class RegisterView(generics.GenericAPIView):
     # permission_classes = (IsAuthenticated,)             # <-- And here
@@ -95,9 +86,9 @@ class RegisterView(generics.GenericAPIView):
 
 class VerifyEmail(generics.GenericAPIView):
     def get(self, request):
-        token=request.GET.get('token', settings.SECRET_KEY, algorithms=['HS256'])
+        token=request.GET.get('token')
         try:
-            payload = jwt.encode(token)
+            payload = jwt.decode(token, key=settings.SECRET_KEY)
             user=User.objects.get(id=payload['user_id'])
             if not user.is_verified:
                 user.is_verified=True

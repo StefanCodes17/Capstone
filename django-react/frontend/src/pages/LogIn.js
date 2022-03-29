@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import {Link } from 'react-router-dom'
 import {useDispatch} from "react-redux" 
-import {signup} from "../state/slices/userSlice"
+import {signin} from "../state/slices/userSlice"
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios'
 
 const Login = () => {
 
@@ -20,14 +20,29 @@ const Login = () => {
   const handleSubmit = (e) =>{
     e.preventDefault()
 
-    dispatch(login({
-      username,
-      email,
-      password,
-      isLoggedIn: true
-    }))
-
-    navigate("/")
+    axios.post('http://localhost:8000/api/users/login', {email, password}, {
+          headers:{
+            'Content-Type': 'application/json'
+          },
+        }).then((res)=>{
+          dispatch(signin({
+            ...res.data,
+            isLoggedIn: true
+          }))
+          navigate("/")
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // Request made and server responded
+            setError(true)
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log("Error with connecting to server", error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+        });
   }
 
 
@@ -40,7 +55,7 @@ const Login = () => {
             </div>
           </Link>
           <div className=" px-8 py-10 mt-5">
-            <h1 className="font-semibold font-sans text-xl">Create an Account</h1>
+            <h1 className="font-semibold font-sans text-xl">Log into your account!</h1>
             <form 
             onSubmit={handleSubmit}
             className="flex flex-col mt-6 max-w-xs m-auto"
@@ -53,24 +68,10 @@ const Login = () => {
                <input 
                 required
                 value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+                onChange={(e) => {setEmail(e.target.value); error && setError(false)}} 
                 type="email" 
                 id="email" 
                 name="email"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
-              </div>
-              {/*Username Field */}
-              <label htmlFor="email" className="font-semibold text-sm mb-2">
-                  Username
-                </label>
-              <div className={`justify-center opacity-40 flex border border-gray-300 rounded focus:shadow items-center`} >
-               <input 
-                required
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
-                type="text" 
-                id="username" 
-                name="username"
                 className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
               </div>
               {/*Password Field */}
@@ -81,7 +82,7 @@ const Login = () => {
                <input 
                 required
                 value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+                onChange={(e) => {setPassword(e.target.value); error && setError(false)}} 
                 type="password" 
                 id="password" 
                 name="password"
@@ -89,7 +90,7 @@ const Login = () => {
               </div>
               
               <button type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2">Sign In</button>
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2">Login</button>
             </form>
             {error && (
             <div className="bg-red-100 border-t-4 mt-3 border-red-600 rounded-b text-red-900 px-4 py-3 shadow-md" role="alert">
