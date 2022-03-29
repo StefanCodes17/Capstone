@@ -23,11 +23,11 @@ const Main = () => {
         <HeaderText/>
         <div className="flex justify-between m-auto  pr-12">
           <div className="hidden xl:block relative w-full h-auto">
-            <img src="./assets/personHomePage.svg" alt="image" width="360" className="absolute bottom-0 left-10 z-20"></img>
-            <img src="./assets/greenblog.svg" alt="green_blob" width="850" className="absolute -bottom-56 -left-20"></img>
+            <img src="./static/personHomePage.svg" alt="image" width="360" className="absolute bottom-0 left-10 z-20"></img>
+            <img src="./static/greenblog.svg" alt="green_blob" width="850" className="absolute -bottom-56 -left-20"></img>
           </div>
           <div className="mt-5 lg:mt-0 relative">
-            <img src="./assets/img.svg" width="450" className="top-15 right-14"></img>
+            <img src="./static/img.svg" width="450" className="top-15 right-14"></img>
           </div>
         </div>
     </div>
