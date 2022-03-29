@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {useSelector} from "react-redux"
 import {getUser} from '../state/slices/userSlice'
 import {BsPersonCircle} from "react-icons/bs"
@@ -8,6 +8,7 @@ const Navbar = () => {
 	const [showDropdown,setShowDropdown]=useState(false)
 	const [counter, setCounter] = useState(0)
 	const user = useSelector(getUser)
+	const currentRoute=useLocation().pathname
 
 	return (
 		<nav className="bg-primary_color border-gray-200 px-2 sm:px-4 py-2.5">
@@ -36,8 +37,8 @@ const Navbar = () => {
 							{!showDropdown ? (
 								console.log("No Dropdown")
 							):(										
-								<div className='absolute z-50 grid grid-rows-2 gap-1 pr-2 -left-2 content-center'>
-									<Link to= "dashboard" className='row-start-1'>
+								<div className='absolute z-51 grid grid-rows-2 gap-1 pr-2 -left-2 content-center'>
+									<Link to= "dashboard" className={`row-start-1 ${(currentRoute==="/dashboard") ?'hidden':'visible'}`}>
 										<button className='bg-lifepad_green text-lifepad_black hover:text-lifepad_green inline-block font-medium text-xs uppercase rounded shadow-md drop-shadow-md hover:bg-lifepad_black hover:shadow-lg focus:bg-green-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-400 active:shadow-lg transition duration-150 ease-in-out h-5 w-15 align-middle'>
 											<h2 className="pr-1 pl-1">Dashboard</h2>
 										</button>
@@ -52,8 +53,8 @@ const Navbar = () => {
 							</div>
 							</div>
 						)}
-				<div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
-					{/* <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+				{/* <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
+					<ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
 						<li>
 							<a aria-current="page" className="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white" href="#">Home</a>
 						</li>
@@ -66,8 +67,8 @@ const Navbar = () => {
 						<li>
 							<a className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" href="#">Contact</a>
 						</li>
-					</ul> */}
-				</div>
+					</ul>
+				</div> */}
 			</div>
 		</div>
 	</nav>

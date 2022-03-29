@@ -5,8 +5,8 @@ import Main from '../components/Main'
 const HomePage = () => {
 
 	return (
-		<div className='bg-primary_color h-screen w-screen'>
-			<div className="h-screen max-w-screen-2xl overflow-hidden">
+		<div className='bg-lifepad_black h-screen w-screen'>
+			<div className="h-screen max-w-screen-3xl overflow-hidden">
 				<Navbar />
 				<Main/>
 			</div>
