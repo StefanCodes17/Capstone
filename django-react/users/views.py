@@ -67,7 +67,7 @@ class RegisterView(generics.GenericAPIView):
 
         user_data=serializer.data
         user=User.objects.get(email=user_data['email'])
-        token= RefreshToken.for_user(user).access_token
+        token= RefreshToken.for_user(user)
 
         current_site=get_current_site(request).domain
         relative_link= reverse('email_verify')
