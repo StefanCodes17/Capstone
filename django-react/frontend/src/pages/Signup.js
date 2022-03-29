@@ -3,7 +3,7 @@ import {Link } from 'react-router-dom'
 import {useDispatch} from "react-redux" 
 import {signup} from "../state/slices/userSlice"
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios'
 
 const Signup = () => {
 
@@ -20,14 +20,29 @@ const Signup = () => {
   const handleSubmit = (e) =>{
     e.preventDefault()
 
-    dispatch(signup({
-      username,
-      email,
-      password,
-      isLoggedIn: true
-    }))
-
-    navigate("/")
+    axios.post('http://localhost:8000/api/users/register', {username, email, password}, {
+          headers:{
+            'Content-Type': 'application/json'
+          },
+        }).then((res)=>{
+          dispatch(signup({
+            ...res.data,
+            isLoggedIn: false
+          }))
+          navigate("/")
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // Request made and server responded
+            setError(true)
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log("Error with connecting to server", error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+        });
   }
 
 
@@ -53,7 +68,7 @@ const Signup = () => {
                <input 
                 required
                 value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+                onChange={(e) => {setEmail(e.target.value); error && setError(false)}} 
                 type="email" 
                 id="email" 
                 name="email"
@@ -67,7 +82,7 @@ const Signup = () => {
                <input 
                 required
                 value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+                onChange={(e) => {setUsername(e.target.value); error && setError(false)}} 
                 type="text" 
                 id="username" 
                 name="username"
@@ -81,7 +96,7 @@ const Signup = () => {
                <input 
                 required
                 value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+                onChange={(e) => {setPassword(e.target.value); error && setError(false)}} 
                 type="password" 
                 id="password" 
                 name="password"

@@ -1,11 +1,13 @@
-
 import React, {useState} from 'react';
 import {Link, useLocation} from 'react-router-dom'
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import {getUser} from '../state/slices/userSlice'
 import {BsPersonCircle} from "react-icons/bs"
+import {logout} from '../state/slices/userSlice'
 
 const Navbar = () => {
+	const dispatch = useDispatch()
+
 	const [showDropdown,setShowDropdown]=useState(false)
 	const [counter, setCounter] = useState(0)
 	const user = useSelector(getUser)
@@ -42,11 +44,13 @@ const Navbar = () => {
 											<h2 className="pr-1 pl-1">Dashboard</h2>
 										</button>
 									</Link>
-									<Link to="/" className='row-span-1'>
+									<div onClick={()=> {
+											dispatch(logout())
+										}}>
 										<button className='bg-lifepad_green text-lifepad_black hover:text-white inline-block font-medium text-xs uppercase rounded shadow-md drop-shadow-md hover:bg-red-600 hover:shadow-lg focus:bg-green-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-400 active:shadow-lg transition duration-150 ease-in-out h-5 w-15 align-middle'>
 											<h2 className="pr-1 pl-1">Logout</h2>
 										</button>
-									</Link>
+									</div>
 								</div>
 							)}
 							</div>

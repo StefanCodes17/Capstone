@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Main from '../components/Main'
+import axios from "axios"
 
 const HomePage = () => {
 
