@@ -1,0 +1,62 @@
+{
+  "name": "capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "watch:css": "TAILWIND_MODE=watch postcss src/assets/tailwind.css -o src/assets/main.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StefanCodes17/Capstone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StefanCodes17/Capstone/issues"
+  },
+  "homepage": "https://github.com/StefanCodes17/Capstone#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/runtime": "^7.17.8",
+    "@redux-devtools/core": "^3.11.0",
+    "autoprefixer": "^9.8.6",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.3",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^6.7.0",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss": "^8.4.7",
+    "postcss-cli": "^9.1.0",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.4.2",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.0.23",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.0",
+    "axios": "^0.26.1",
+    "postcss-import": "^14.0.2",
+    "react": "^17.0.2",
+    "react-colorful": "^5.5.1",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.2",
+    "redux": "^4.1.2",
+    "slate": "^0.75.0",
+    "slate-react": "^0.75.0"
+  }
+}
