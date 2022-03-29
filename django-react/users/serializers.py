@@ -1,3 +1,4 @@
+from importlib.resources import read_binary
 from rest_framework import serializers
 from .models import User
 from django.contrib import auth
@@ -24,15 +25,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 class LoginSerializer(serializers.ModelSerializer):
-    email=serializers.EmailField(max_length=68, min_length=6)
+    email=serializers.EmailField(max_length=255, min_length=2)
     password=serializers.CharField(max_length=68, min_length=6, write_only=True)
+    username=serializers.CharField(max_length=255, min_length=2, read_only=True)
+    tokens=serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
         model= User
         fields=[
             'email',
             'username',
-            'password'
+            'password',
+            'tokens'
         ]
 
     def validate(self, attrs):
@@ -42,10 +46,11 @@ class LoginSerializer(serializers.ModelSerializer):
         user=auth.authenticate(email=email, password=password)
         if(not user):
             raise AuthenticationFailed("Invalid credentials")
+
         return {
             'email': user.email,
             'username': user.username,
-            #'tokens': 
+            'tokens': user.tokens() 
         }
 
     def create(self, validated_data):

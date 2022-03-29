@@ -11,6 +11,8 @@ from .models import User
 from .util import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+import jwt
+from django.conf import settings
 
 # from users.serializers import UserSerializer
 
@@ -92,8 +94,19 @@ class RegisterView(generics.GenericAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 class VerifyEmail(generics.GenericAPIView):
-    def get(self):
-        pass
+    def get(self, request):
+        token=request.GET.get('token', settings.SECRET_KEY, algorithms=['HS256'])
+        try:
+            payload = jwt.encode(token)
+            user=User.objects.get(id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified=True
+                user.save()
+            return Response({'message': "Email successfully verified"}, status=status.HTTP_201_CREATED)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': "Activation link expired"}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError:
+            return Response({'error': "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(generics.GenericAPIView):
@@ -103,3 +116,4 @@ class LoginView(generics.GenericAPIView):
     def post(self, request):
         serializer=self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

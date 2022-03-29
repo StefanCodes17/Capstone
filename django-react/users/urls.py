@@ -8,7 +8,8 @@ urlpatterns = [
     #path('<int:pk>', views.UserDetailAPIView.as_view(), name="retrieve_users"),
     #path('<int:pk>/update', views.UserDetailAPIView.as_view(), name="upudate_users"),
     #path('documents', views.document_library, name='documents'),
-    path('register', views.RegisterView.as_view(), name='login_route'),
+    path('login', views.LoginView.as_view(), name='login_route'),
+    path('register', views.RegisterView.as_view(), name='register_route'),
     path('email-verify', views.VerifyEmail.as_view(), name="email_verify")
     #path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
 
