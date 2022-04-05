@@ -18,7 +18,7 @@ const DocEditorHeader = ()=>{
 
 
   return(
-    <div className='px-5 pt-10 flex'>
+    <div className='pt-10 flex'>
       {/* Type of text */}
       <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
         <option value="paragraph">Paragraph</option>
@@ -46,7 +46,7 @@ const DocEditorHeader = ()=>{
          {/*Color Picker */}
          <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
            {!displayColor ? <BiFont/> : <FaFont/>}
-           <div className='w-6 h-1' style={{"background-color": color}}></div>
+           <div className='w-6 h-1' style={{backgroundColor: color}}></div>
            {displayColor &&
           <div className='absolute -bottom-52 left-0'>
               <HexColorPicker color={color} onChange={setColor} />
@@ -77,36 +77,33 @@ const DocEditor = () => {
   ])
 
   return (
-    <>
-    <Navbar/>
+    <div style={{width: "500px", margin: "5px auto"}}>
     <DocEditorHeader/>
-    <div className='px-5 py-2'>
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={newValue => setValue(newValue)}
-        >
-          <Editable 
+    <Slate
+      editor={editor}
+      value={value}
+      onChange={newValue => setValue(newValue)}
+      >
+        <Editable 
           renderElement={renderElement}
           onKeyDown={event => {
-              if (event.key === '`' && event.ctrlKey) {
-                  event.preventDefault()
-                  // Determine whether any of the currently selected blocks are code blocks.
-                  const [match] = Editor.nodes(editor, {
-                    match: n => n.type === 'code',
-                  })
-                  // Toggle the block type depending on whether there's already a match.
-                  Transforms.setNodes(
-                    editor,
-                    { type: match ? 'paragraph' : 'code' },
-                    { match: n => Editor.isBlock(editor, n) }
-                  )
-                }
-              }}
-          />
-        </Slate>
+            if (event.key === '`' && event.ctrlKey) {
+              event.preventDefault()
+              // Determine whether any of the currently selected blocks are code blocks.
+              const [match] = Editor.nodes(editor, {
+                match: n => n.type === 'code',
+              })
+              // Toggle the block type depending on whether there's already a match.
+              Transforms.setNodes(
+                editor,
+                { type: match ? 'paragraph' : 'code' },
+                { match: n => Editor.isBlock(editor, n) }
+              )
+            }
+          }}
+        />
+      </Slate>
     </div>
-    </>
   )
 }
 
