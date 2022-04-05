@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'users',
-    'frontend'
+    'frontend',
+    'document'
 ]
 
 REST_FRAMEWORK = {
