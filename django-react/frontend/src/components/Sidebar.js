@@ -17,9 +17,9 @@ export default function Sidebar(){
         {name: "document 3", id:123123}
     ]
     return(
-        <>
+        <div style={{position: "absolute"}}>
             <Hamburger isOpen={isOpen} setIsOpen={setIsOpen}/>
-            <div className={`bg-sidebar_background_color w-80 h-screen shadow-xl ${isOpen?'translate-x-0':'-translate-x-full'} ease-in-out duration-300 relative`}>
+            <div className={`bg-sidebar_background_color w-80 h-screen shadow-xl ${isOpen?'translate-x-0':'-translate-x-full'} ease-in-out duration-300 relative`} style={{zIndex: 100}}>
                 <p className="pl-1 leading-10 text-left font-sans font-bold text-lifepad_black text-2xl truncate border-r-[40px] border-transparent">
                     Hi, {user?.username}
                     <Link to="/editor">
@@ -34,6 +34,6 @@ export default function Sidebar(){
                 <hr className='shadow-sm fill-lifepad_black'/>
                     <DocTree documents={docs}/>
                 </div>
-        </>
+        </div>
     )
 }
