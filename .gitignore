@@ -1,8 +1,7 @@
 .DS_STORE
 
 db.sqlite3
-django-react/frontend/static/frontend/index.html
-django-react/frontend/static/frontend/main.js
+django-react/frontend/static/*
 # Python
 api/Pipfile
 api/Pipfile.lock
