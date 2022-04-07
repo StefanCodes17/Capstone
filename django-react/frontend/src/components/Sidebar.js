@@ -11,11 +11,42 @@ import {getUser} from '../state/slices/userSlice'
 export default function Sidebar(){
     const [isOpen, setIsOpen] = useState(false);
     const user = useSelector(getUser);
-    var docs=[
-        {name: "document 1", id:123121},
-        {name: "document 2", id:123122},
-        {name: "document 3", id:123123}
-    ]
+    const docs=[{
+        id :"",
+        user_id: "",
+        date_created:"",
+        date_modified:"",
+        title: "",
+        content:"",
+        folder_id:"",
+        children:[
+        {
+            title:"first", 
+            id:1
+        }
+        ,{
+            title:"second", 
+            id:2
+        }, 
+        {
+            title:"third",
+            id:3,
+            children:[
+                {
+                    title:"fourth",
+                    id:4
+                },
+                {
+                    title:"fifth",
+                    id:5,
+                    children:[
+                        
+                    ]
+                }   
+            ]
+        } 
+      ]
+    }];
     return(
         <div style={{position: "absolute"}}>
             <Hamburger isOpen={isOpen} setIsOpen={setIsOpen}/>
