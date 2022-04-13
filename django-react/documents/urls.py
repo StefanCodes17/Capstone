@@ -1,6 +1,10 @@
-from django.urls import path
-from . import views
+from django.urls import include,path
+from rest_framework import routers
+from documents.views import SentimentViewSet
 
-urlpatterns = [
-    
+router=routers.DefaultRouter()
+router.register(r'sentiment_analysis',SentimentViewSet)
+
+urlpatterns=[
+    path('',include(router.urls)),
 ]

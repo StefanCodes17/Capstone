@@ -8,5 +8,9 @@ class FolderAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     pass
 
+class SentimentAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Folder, FolderAdmin)
 admin.site.register(Document, DocumentAdmin)
+admin.site.register(SentimentModel,SentimentAdmin)
