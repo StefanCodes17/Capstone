@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'frontend',
-    'documents'
+    'documents',
 ]
 
 REST_FRAMEWORK = {
