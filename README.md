@@ -18,7 +18,12 @@ source .bashrc
 nvm use 16
 ```
 
-# Running
+# Running in Development
+
+**Make sure you pull**, and run database migrations if necessary
+```
+python3 manage.py migrate
+```
 
 1. In django-react/frontend: `npm run dev`
 2. In django-react/frontend: `npm run watch:css`
