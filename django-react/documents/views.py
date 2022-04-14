@@ -6,6 +6,19 @@ from documents.serializers import SentimentSerializer
 from documents.models import SentimentModel
 from rest_framework.views import APIView
 from documents.sentiment import find_sentiment
+from requests import request
+from .models import *
+from .serializers import *
+
+# Create your views here.
+class FolderViewSet(viewsets.ModelViewSet):
+    queryset = Folder.objects.all()
+    serializer_class = FolderSerializer
+
+class DocumentViewSet(viewsets.ModelViewSet):
+    queryset = Document.objects.all()#.filter(user_id = 2)
+    #queryset = Document.objects.get()#all().filter(user_id = 2)
+    serializer_class = DocumentSerializer
 
 class SentimentViewSet(viewsets.ModelViewSet):
     queryset=SentimentModel.objects.all()

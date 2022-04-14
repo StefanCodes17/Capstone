@@ -3,10 +3,10 @@ from .models import *
 
 # Register your models here.
 class FolderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['folder_id', 'user_id', 'title', 'is_root', 'parent_folder_id']
 
 class DocumentAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['doc_id', 'user_id', 'date_created', 'date_modified', 'title', 'content', 'folder_id']
 
 class SentimentAdmin(admin.ModelAdmin):
     pass
