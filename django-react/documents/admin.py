@@ -8,5 +8,9 @@ class FolderAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ['doc_id', 'user_id', 'date_created', 'date_modified', 'title', 'content', 'folder_id']
 
+class SentimentAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Folder, FolderAdmin)
 admin.site.register(Document, DocumentAdmin)
+admin.site.register(SentimentModel,SentimentAdmin)
