@@ -1,5 +1,4 @@
 from email.policy import default
-from time import timezone
 from django.db import models
 from users.models import User
 # Create your models here.
@@ -9,7 +8,11 @@ class Folder(models.Model):
     user_id=models.ForeignKey(User, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
     title=models.CharField(max_length=255)
     is_root=models.BooleanField(default=False)
-    parent_folder_id=models.IntegerField()
+    parent_folder_id=models.IntegerField(default=0)
+
+    #def root(self, *args, **kwargs):
+     #   if(self.is_root == True):
+      #      self.parent_folder_id = 0
 
     #def __str__(self):
      #   return self.folder_id
@@ -19,7 +22,7 @@ class Document(models.Model):
     user_id=models.ForeignKey(User, on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
     date_modified=models.DateTimeField(auto_now=True)
-    title=models.CharField(max_length=255)
+    title=models.CharField(max_length=255, unique=True)
     content=models.TextField()
     folder_id=models.ForeignKey(Folder, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
 
