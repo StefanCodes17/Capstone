@@ -1,4 +1,5 @@
 from email.policy import default
+from operator import truediv
 from django.db import models
 from users.models import User
 # Create your models here.
@@ -8,7 +9,7 @@ class Folder(models.Model):
     user_id=models.ForeignKey(User, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
     title=models.CharField(max_length=255)
     is_root=models.BooleanField(default=False)
-    parent_folder_id=models.IntegerField(default=0)
+    parent_folder_id=models.ForeignKey('self', null=True, default=None, on_delete=models.CASCADE)
 
     #def root(self, *args, **kwargs):
      #   if(self.is_root == True):
@@ -24,7 +25,7 @@ class Document(models.Model):
     date_modified=models.DateTimeField(auto_now=True)
     title=models.CharField(max_length=255, unique=True)
     content=models.TextField()
-    folder_id=models.ForeignKey(Folder, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
+    folder_id=models.ForeignKey(Folder, null=True, default=None, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
 
 class SentimentModel(models.Model):
     query_string=models.CharField(max_length=500,default="")

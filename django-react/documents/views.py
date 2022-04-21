@@ -12,13 +12,13 @@ from .serializers import *
 
 # Create your views here.
 class FolderViewSet(viewsets.ModelViewSet):
-    queryset = Folder.objects.all()
     serializer_class = FolderSerializer
+    queryset = Folder.objects.all()
 
 class DocumentViewSet(viewsets.ModelViewSet):
+    serializer_class = DocumentSerializer
     queryset = Document.objects.all()#.filter(user_id = 2)
     #queryset = Document.objects.get()#all().filter(user_id = 2)
-    serializer_class = DocumentSerializer
 
 class SentimentViewSet(viewsets.ModelViewSet):
     queryset=SentimentModel.objects.all()
