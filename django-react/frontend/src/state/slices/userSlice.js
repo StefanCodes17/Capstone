@@ -53,7 +53,7 @@ export const userSlice= createSlice({
    },
     signin: (state, action) => {
         state.user = action.payload
-        axios.post('http://localhost:8000/api/users/token', {email: action.payload.email, password: action.payload.password}, {
+        axios.post(`${process.env.REACT_APP_HOST}/api/users/token`, {email: action.payload.email, password: action.payload.password}, {
           headers:{
             'Content-Type': 'application/json'
           },
@@ -74,6 +74,8 @@ export const userSlice= createSlice({
     },
     logout: (state) => {
       state.user = null
+      localStorage.removeItem("access")
+      localStorage.removeItem("refresh")
     },
     toggleFolder : (state, action)=>{
       state.documents = action.payload
