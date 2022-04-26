@@ -18,14 +18,12 @@ import {signin, getUser} from "../src/state/slices/userSlice"
 import axios from 'axios'
 
 const App = () => {
-
-    console.log("AUTH INITIAL LOGIN")
     const user = useSelector(getUser)
     const dispatch = useDispatch(signin())
 
     useEffect(()=>{
         if(!user){
-            axios.post("http://localhost:8000/api/users/get_user", {}, {
+            axios.post(`${process.env.REACT_APP_HOST}/api/users/get_user`, {}, {
                 headers:{
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${localStorage.getItem("access")}`
