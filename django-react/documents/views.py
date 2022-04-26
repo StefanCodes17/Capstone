@@ -16,6 +16,7 @@ from .serializers import *
 class FolderViewSet(viewsets.ModelViewSet):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args,**kwargs):
         serializer=FolderSerializer
@@ -47,17 +48,17 @@ class DocumentViewSet(viewsets.ModelViewSet):
 class DocumentListAPIView(generics.ListAPIView):
     queryset=Document.objects.all()#.filter(user_id=request.user_id)
     serializer_class=DocumentSerializer
-    permission_classes=[IsAuthenticatedOrReadOnly]
+    permission_classes=[IsAuthenticated]
 
 class DocumentCreateAPIView(generics.CreateAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    #permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
 class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset=Document.objects.all()#.filter(user_id=request.user_id)
     serializer_class=DocumentSerializer
-    #permission_classes=[IsAuthenticatedOrReadOnly]
+    permission_classes=[IsAuthenticated]
     #renderer_classes = [JSONRenderer]
     lookup_field='doc_id'
 
@@ -78,6 +79,7 @@ class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
 class SentimentViewSet(viewsets.ModelViewSet):
     queryset=SentimentModel.objects.all()
     serializer_class=SentimentSerializer
+    permission_classes = [IsAuthenticated]
     
     def create(self,request,*args,**kwargs):
         serializer=SentimentSerializer
