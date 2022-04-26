@@ -1,11 +1,13 @@
 from cgitb import lookup
-import email
+from django.conf import settings
 from re import A
+from django.shortcuts import redirect
 from rest_framework.response import Response
+import jwt
 
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
@@ -14,6 +16,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 import jwt
 from django.conf import settings
+from decouple import config
+import pprint
 
 # from users.serializers import UserSerializer
 
@@ -42,11 +46,21 @@ from django.conf import settings
 # 	]
 # 	return Response(data, safe=False)
 
+class GetUser(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        access = request.headers.get('Authorization').split(' ')[1]
+        user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
+        user = User.objects.get(id=user_id)
+        print(user.username)
+        return Response({"email": user.email, "username": user.username}, status=status.HTTP_201_CREATED)
 
 class UserListCreateAPIView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminUser]
 
     def perform_create(self, serializer):
         name = serializer.validated_data.get('name')
@@ -86,14 +100,14 @@ class RegisterView(generics.GenericAPIView):
 
 class VerifyEmail(generics.GenericAPIView):
     def get(self, request):
-        token=request.GET.get('token')
+        token=request.GET.get('token') # Gets access token from url
         try:
             payload = jwt.decode(token, key=settings.SECRET_KEY)
             user=User.objects.get(id=payload['user_id'])
             if not user.is_verified:
                 user.is_verified=True
                 user.save()
-            return Response({'message': "Email successfully verified"}, status=status.HTTP_201_CREATED)
+            return redirect("index")
         except jwt.ExpiredSignatureError:
             return Response({'error': "Activation link expired"}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
@@ -101,7 +115,6 @@ class VerifyEmail(generics.GenericAPIView):
 
 
 class LoginView(generics.GenericAPIView):
-
     serializer_class=LoginSerializer
 
     def post(self, request):

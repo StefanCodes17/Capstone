@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
 
 export const userSlice= createSlice({
   name: 'user',
@@ -51,7 +52,26 @@ export const userSlice= createSlice({
       state.user = action.payload
    },
     signin: (state, action) => {
-        state.user = action.payload    },
+        state.user = action.payload
+        axios.post('http://localhost:8000/api/users/token', {email: action.payload.email, password: action.payload.password}, {
+          headers:{
+            'Content-Type': 'application/json'
+          },
+        }).then((res)=>{
+          localStorage.setItem("access", res.data["access"])
+          localStorage.setItem("refresh", res.data["refresh"])
+        }).catch(function (error) {
+          if (error.response) {
+            console.log(error.response)
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log("Error with connecting to server", error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+        });
+    },
     logout: (state) => {
       state.user = null
     },
