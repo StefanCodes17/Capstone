@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 
 import HomePage from './pages/Home';
@@ -13,8 +13,35 @@ import DocEditor from './components/DocEditor'
 import {Provider} from "react-redux"
 import store from "./state/app/store"
 import UserAuthWrapper from './wrappers/UserAuthWrapper'
+import {useDispatch, useSelector} from "react-redux" 
+import {signin, getUser} from "../src/state/slices/userSlice"
+import axios from 'axios'
 
 const App = () => {
+
+    console.log("AUTH INITIAL LOGIN")
+    const user = useSelector(getUser)
+    const dispatch = useDispatch(signin())
+
+    useEffect(()=>{
+        if(!user){
+            axios.post("http://localhost:8000/api/users/get_user", {}, {
+                headers:{
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem("access")}`
+                },
+              }).then(res=>{
+                dispatch(signin({
+                  ...res.data,
+                  isLoggedIn: true
+                }))
+              }).catch(err =>{
+                console.log(err)
+              })
+        }
+    }, [])
+
+
     return (
         <Router>
             <Routes>

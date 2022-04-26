@@ -9,7 +9,10 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = ['doc_id', 'user_id', 'date_created', 'date_modified', 'title', 'content', 'folder_id']
 
 class SentimentAdmin(admin.ModelAdmin):
-    list_display = ['query_string', 'raw_score', 'sentiment']
+    list_display=['query_string','raw_score','sentiment']
+
+class SpellCheckAdmin(admin.ModelAdmin):
+    list_display=['query_word','dictionary','word_count','correct_words']
 
 admin.site.register(Folder, FolderAdmin)
 admin.site.register(Document, DocumentAdmin)

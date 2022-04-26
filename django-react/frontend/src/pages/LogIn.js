@@ -8,10 +8,7 @@ import axios from 'axios'
 const Login = () => {
 
   const [email, setEmail] = useState("")
-  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [showPass, setShowPass] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
   const dispatch = useDispatch()
@@ -19,7 +16,6 @@ const Login = () => {
 
   const handleSubmit = (e) =>{
     e.preventDefault()
-
     axios.post('http://localhost:8000/api/users/login', {email, password}, {
           headers:{
             'Content-Type': 'application/json'
@@ -27,6 +23,7 @@ const Login = () => {
         }).then((res)=>{
           dispatch(signin({
             ...res.data,
+            password: password,
             isLoggedIn: true
           }))
           navigate("/")

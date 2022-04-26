@@ -1,4 +1,3 @@
-from typing import Type
 from django.db import models
 
 from django.contrib.auth.models import (
@@ -29,6 +28,8 @@ class UserManager(BaseUserManager):
             raise TypeError("Email must exist")
         
         user=self.create_user(username, email, password)
+        user.is_admin=True
+        user.is_verified=True
         user.is_superuser=True
         user.is_staff=True
         user.save()
@@ -40,6 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email=models.EmailField(max_length=255, unique=True, db_index=True)
     password=models.CharField(max_length=255)
     is_verified=models.BooleanField(default=False)
+    is_admin=models.BooleanField(default=False)
     is_active=models.BooleanField(default=True)
     is_staff=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -52,6 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
     
     def tokens(self):
         refresh=RefreshToken.for_user(self)
