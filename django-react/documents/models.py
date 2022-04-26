@@ -22,13 +22,19 @@ class Document(models.Model):
     title=models.CharField(max_length=255)
     content=models.TextField()
     folder_id=models.ForeignKey(Folder, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
-
-class SentimentModel(models.Model):
-    query_string=models.CharField(max_length=500,default="")
-    raw_score=models.FloatField(default=0) 
-    sentiment=models.CharField(max_length=100,default='Neutral')
-    
     #def __str__(self):
-     #   return self.doc_id
+    #   return self.doc_id
 
     #def create_document():
+
+class SentimentModel(models.Model):
+    query_string=models.CharField(max_length=2000,default="")
+    raw_score=models.FloatField(default=0) 
+    sentiment=models.CharField(max_length=100,default='Neutral')
+
+class SpellCheckModel(models.Model):
+    query_word=models.CharField(max_length=50, default="")
+    dictionary=models.CharField(max_length=5000,default="")
+    word_count=models.IntegerField(default=3)
+    correct_words=models.CharField(max_length=1000,default="")
+    
