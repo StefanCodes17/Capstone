@@ -7,6 +7,7 @@ import {BiFont} from 'react-icons/bi'
 import { HexColorPicker } from "react-colorful";
 
 import Navbar from './Navbar'
+import useAutosave from '../utils/useAutosave';
 
 const DocEditorHeader = ()=>{
 
@@ -57,6 +58,10 @@ const DocEditorHeader = ()=>{
   )
 }
   
+
+
+
+
 const DocEditor = () => {
 
     const renderElement = useCallback(props => {
@@ -68,13 +73,30 @@ const DocEditor = () => {
         }
       }, [])
 
-    const editor = useMemo(() => withReact(createEditor()), [])
-    const [value, setValue] = useState([
-    {
-      type: 'paragraph',
-      children: [{ text: 'A line of text in a paragraph.' }],
-    },
-  ])
+    const editor = useMemo(() => withReact(createEditor()), []);
+
+    //Initial editor contents
+    const loadedData = useMemo(() => 
+      JSON.parse(window.localStorage.getItem("doc")) || [
+        {
+          type: 'paragraph',
+          children: [{ text: 'Welcome to Life Pad!' }],
+        },
+      ],
+      []
+    );
+
+    const [value, setValue] = useAutosave(loadedData);
+    const onChangeContent = useCallback((newValue) => {
+      // only save if text changed, not selection
+      const isAstChange = editor.operations.some(
+        op => 'set_selection' !== op.type
+      );
+      if (isAstChange) {
+        // Save the value to Local Storage.
+        setValue(newValue);
+      }
+    });
 
   return (
     <div style={{width: "500px", margin: "5px auto"}}>
