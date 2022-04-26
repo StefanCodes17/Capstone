@@ -3,6 +3,8 @@ certifi
 charset-normalizer
 click
 colorama
+cryptography
+drf-jwt
 Django
 django-cors-headers
 djangorestframework
@@ -15,6 +17,7 @@ numpy
 pandas
 PyJWT
 python-dateutil
+python-decouple
 pytz
 regex
 requests
