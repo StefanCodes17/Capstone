@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from email.policy import default
 from operator import truediv
 from django.db import models
@@ -7,9 +8,15 @@ from users.models import User
 class Folder(models.Model):
     folder_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(User, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
-    title=models.CharField(max_length=255)
+    title=models.CharField(max_length=255, unique=True)
     is_root=models.BooleanField(default=False)
     parent_folder_id=models.ForeignKey('self', null=True, default=None, on_delete=models.CASCADE)
+
+    @property
+    def parent_id(self):
+        if(self.is_root is True):
+            self.parent_folder_id = False
+        return self.parent_folder_id
 
     #def root(self, *args, **kwargs):
      #   if(self.is_root == True):

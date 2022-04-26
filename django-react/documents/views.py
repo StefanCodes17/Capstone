@@ -1,7 +1,9 @@
 from .models import Document
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework import viewsets,status
+from rest_framework.renderers import JSONRenderer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import viewsets,status,generics
 from documents.serializers import SentimentSerializer
 from documents.models import SentimentModel
 from rest_framework.views import APIView
@@ -15,10 +17,63 @@ class FolderViewSet(viewsets.ModelViewSet):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
 
+    def create(self, request, *args,**kwargs):
+        serializer=FolderSerializer
+        query_data=request.data
+        parentid=Folder.parent_id(query_data['is_root'])
+        new_query=Folder.objects.create(folder_id=query_data['folder_id'], user_id=query_data['user_id'], title=query_data['title'], is_root=query_data['is_root'], parent_folder_id=parentid)
+        new_query.save()
+        return Response(serializer(new_query).data, status=status.HTTP_201_CREATED)
+
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     queryset = Document.objects.all()#.filter(user_id = 2)
     #queryset = Document.objects.get()#all().filter(user_id = 2)
+
+    #def create(self, request, *args, **kwargs):
+     #   serializer=DocumentSerializer
+      #  query_data=request.data
+        #new_query=Document.objects.create(query_data)
+       # query_data.save()
+        #return Response(serializer(query_data).data, status=status.HTTP_201_CREATED)
+
+#def createdoc(request):
+ #   if request.method == 'POST':
+  #      serializer=DocumentSerializer(data=request.data)
+   #     if serializer.is_valid():
+    #        serializer.save()
+     #       return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class DocumentListAPIView(generics.ListAPIView):
+    queryset=Document.objects.all()#.filter(user_id=request.user_id)
+    serializer_class=DocumentSerializer
+    permission_classes=[IsAuthenticatedOrReadOnly]
+
+class DocumentCreateAPIView(generics.CreateAPIView):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+    #permission_classes = [IsAuthenticatedOrReadOnly]
+
+class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset=Document.objects.all()#.filter(user_id=request.user_id)
+    serializer_class=DocumentSerializer
+    #permission_classes=[IsAuthenticatedOrReadOnly]
+    #renderer_classes = [JSONRenderer]
+    lookup_field='doc_id'
+
+#class DocumentList(APIView):
+ #   def get(self, request, format=None):
+  #      queryset=Document.objects.all()
+   #     serializer=DocumentSerializer(queryset, many=True)
+    #    return Response(serializer.data)
+
+    #def post(self, request, format=None):
+     #   serializer = DocumentSerializer(data=request.data)
+      #  if serializer.is_valid():
+       #     serializer.save()
+        #    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SentimentViewSet(viewsets.ModelViewSet):
     queryset=SentimentModel.objects.all()

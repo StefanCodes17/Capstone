@@ -10,7 +10,7 @@ class FolderSerializer(serializers.ModelSerializer):
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ('user_id', 'title', 'content', 'folder_id')
+        fields = ('user_id', 'title', 'content', 'folder_id') #user_id for checking purposes
 
 class SentimentSerializer(serializers.ModelSerializer):
     class Meta:
