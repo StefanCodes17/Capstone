@@ -22,8 +22,8 @@ class Folder(models.Model):
      #   if(self.is_root == True):
       #      self.parent_folder_id = 0
 
-    #def __str__(self):
-     #   return self.folder_id
+    def __str__(self):
+        return self.title
 
 class Document(models.Model):
     doc_id=models.AutoField(primary_key=True)
@@ -33,6 +33,9 @@ class Document(models.Model):
     title=models.CharField(max_length=255, unique=True)
     content=models.TextField()
     folder_id=models.ForeignKey(Folder, null=True, default=None, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
+
+    def __str__(self):
+        return self.title
 
 class SentimentModel(models.Model):
     query_string=models.CharField(max_length=2000,default="")
