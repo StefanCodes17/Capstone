@@ -16,6 +16,4 @@ urlpatterns = [
     path('', include(router.urls)),
     path('doc', DocumentList.as_view(), name='list_and_create'),
     path('doc/<int:pk>/', DocumentSpecialOperations.as_view(), name='update_and_delete')
-    #path('folder/', FolderViewSet.as_view({'get': 'list'})),
-    #path('sentiment_analysis/', SentimentViewSet.as_view(), name='sentiment')
 ]
