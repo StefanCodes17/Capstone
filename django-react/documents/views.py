@@ -27,55 +27,48 @@ class FolderViewSet(viewsets.ModelViewSet):
         new_query.save()
         return Response(serializer(new_query).data, status=status.HTTP_201_CREATED)
 
-class DocumentViewSet(viewsets.ModelViewSet):
-    serializer_class = DocumentSerializer
-    queryset = Document.objects.all()#.filter(user_id = 2)
-    #queryset = Document.objects.get()#all().filter(user_id = 2)
-
-    #def create(self, request, *args, **kwargs):
-     #   serializer=DocumentSerializer
-      #  query_data=request.data
-        #new_query=Document.objects.create(query_data)
-       # query_data.save()
-        #return Response(serializer(query_data).data, status=status.HTTP_201_CREATED)
-
-#def createdoc(request):
- #   if request.method == 'POST':
-  #      serializer=DocumentSerializer(data=request.data)
-   #     if serializer.is_valid():
-    #        serializer.save()
-     #       return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class DocumentListAPIView(generics.ListAPIView):
-    queryset=Document.objects.all()#.filter(user_id=request.user_id)
+class DocumentList(generics.GenericAPIView):
     serializer_class=DocumentSerializer
-    #permission_classes=[IsAuthenticated]
+    queryset=Document.objects.all()
+    def get(self, request):
+        #permission_classes=[IsAuthenticated]
+        queryset=Document.objects.all()
+        serializer=self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
-class DocumentCreateAPIView(generics.CreateAPIView):
-    queryset = Document.objects.all()
-    serializer_class = DocumentSerializer
-    #permission_classes = [IsAuthenticated]
+    def post(self, request):
+        #permission_classes=[IsAuthenticated]
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset=Document.objects.all()#.filter(user_id=request.user_id)
+class DocumentSpecialOperations(generics.GenericAPIView):
     serializer_class=DocumentSerializer
-    #permission_classes=[IsAuthenticated]
-    #renderer_classes = [JSONRenderer]
-    lookup_field='doc_id'
-
-#class DocumentList(APIView):
- #   def get(self, request, format=None):
-  #      queryset=Document.objects.all()
-   #     serializer=DocumentSerializer(queryset, many=True)
-    #    return Response(serializer.data)
-
-    #def post(self, request, format=None):
-     #   serializer = DocumentSerializer(data=request.data)
-      #  if serializer.is_valid():
-       #     serializer.save()
-        #    return Response(serializer.data, status=status.HTTP_201_CREATED)
-        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    queryset=Document.objects.all()
+    def get(self, request, pk):
+        #permission_classes=[IsAuthenticated]
+        try:
+            queryset_pk=Document.objects.get(pk=pk)
+        except:
+            return Response({'error': 'No document found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer=self.serializer_class(queryset_pk)
+        return Response(serializer.data)
+    
+    def put(self, request, pk):
+        queryset_pk=Document.objects.get(doc_id=pk)
+        serializer = self.serializer_class(queryset_pk, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        queryset_pk=Document.objects.get(doc_id=pk)
+        queryset_pk.delete()
+        return Response({'status': 'Successfully Deleted'}, status=status.HTTP_200_OK)
 
 class SentimentViewSet(viewsets.ModelViewSet):
     queryset=SentimentModel.objects.all()
