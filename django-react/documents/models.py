@@ -5,7 +5,7 @@ from django.db import models
 from users.models import User
 # Create your models here.
 
-class Folder(models.Model):
+class FolderModel(models.Model):
     folder_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(User, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
     title=models.CharField(max_length=255, unique=True)
@@ -25,14 +25,14 @@ class Folder(models.Model):
     def __str__(self):
         return self.title
 
-class Document(models.Model):
+class DocumentModel(models.Model):
     doc_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(User, on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
     date_modified=models.DateTimeField(auto_now=True)
     title=models.CharField(max_length=255, unique=True)
     content=models.TextField()
-    folder_id=models.ForeignKey(Folder, null=True, default=None, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
+    folder_id=models.ForeignKey(FolderModel, null=True, default=None, on_delete=models.CASCADE) #CHANGE TO FOREIGN KEY
 
     def __str__(self):
         return self.title

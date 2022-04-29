@@ -14,6 +14,6 @@ class SentimentAdmin(admin.ModelAdmin):
 class SpellCheckAdmin(admin.ModelAdmin):
     list_display=['query_word','dictionary','word_count','correct_words']
 
-admin.site.register(Folder, FolderAdmin)
-admin.site.register(Document, DocumentAdmin)
+admin.site.register(FolderModel, FolderAdmin)
+admin.site.register(DocumentModel, DocumentAdmin)
 admin.site.register(SentimentModel,SentimentAdmin)

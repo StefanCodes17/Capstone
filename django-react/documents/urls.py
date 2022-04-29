@@ -8,12 +8,13 @@ from documents.views import SpellCheckViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'folder', FolderViewSet)
 router.register(r'sentiment_analysis',SentimentViewSet)
 router.register(r'spell_check',SpellCheckViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('doc', DocumentList.as_view(), name='list_and_create'),
-    path('doc/<int:pk>/', DocumentSpecialOperations.as_view(), name='update_and_delete')
+    path('doc/', DocumentList.as_view(), name='doc_list_and_create'),
+    path('doc/<int:pk>/', DocumentSpecialOperations.as_view(), name='doc_update_and_delete'),
+    path('folder/', FolderList.as_view(), name='folder_list_and_create'),
+    path('folder/<int:pk>/', FolderSpecialOperations.as_view(), name='folder_update_and_delete')
 ]
