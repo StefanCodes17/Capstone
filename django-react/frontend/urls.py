@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from .views import index
 
 urlpatterns = [
-    path('', index, name="index"),
+    re_path('(^(?!(api|admin)).*$)', index, name="index"),
 ]

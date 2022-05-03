@@ -15,20 +15,14 @@ import store from "./state/app/store"
 import UserAuthWrapper from './wrappers/UserAuthWrapper'
 import {useDispatch, useSelector} from "react-redux" 
 import {signin, getUser} from "../src/state/slices/userSlice"
-import axios from 'axios'
+import api from '../config'
 
 const App = () => {
     const user = useSelector(getUser)
     const dispatch = useDispatch(signin())
-
     useEffect(()=>{
         if(!user){
-            axios.post(`${process.env.REACT_APP_HOST}/api/users/get_user`, {}, {
-                headers:{
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${localStorage.getItem("access")}`
-                },
-              }).then(res=>{
+            api.post(`/api/users/get_user`).then(res=>{
                 dispatch(signin({
                   ...res.data,
                   isLoggedIn: true
