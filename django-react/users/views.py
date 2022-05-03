@@ -15,7 +15,6 @@ from .util import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 import jwt
-from django.conf import settings
 from decouple import config
 import pprint
 
@@ -52,9 +51,9 @@ class GetUser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         access = request.headers.get('Authorization').split(' ')[1]
+        print("Get access token:", access)
         user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
         user = User.objects.get(id=user_id)
-        print(user.username)
         return Response({"email": user.email, "username": user.username}, status=status.HTTP_201_CREATED)
 
 class UserListCreateAPIView(generics.ListCreateAPIView):
