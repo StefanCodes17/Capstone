@@ -17,13 +17,10 @@ const Tree=({documents})=>{
                 {
                 document.hasOwnProperty("children") ?  
                     //folder
-                    <Folder folder={document}/>
+                    <Folder folder={document} key={document.id} />
                     :
                     // make documents
-                    <button type="button" className="document inline-flex w-64 px-5 mr-5 text-sm font-small bg text-lifepad_black drop-shadow-sm hover:bg-lifepad_green hover:text-white hover:shadow-inner">
-                        <HiOutlineDocumentText className="w-4 h-4 pt-1 mr-2"/>
-                        {document.title}
-                    </button>
+                    <Document document={document} key={document.id} />
                 }
             </div>
         ))
@@ -31,6 +28,16 @@ const Tree=({documents})=>{
     </div>
     )
 }
+
+const Document = ({document})=> {
+    return (
+        <button type="button" className="document inline-flex w-64 px-5 mr-5 text-sm font-small bg text-lifepad_black drop-shadow-sm hover:bg-lifepad_green hover:text-white hover:shadow-inner">
+            <HiOutlineDocumentText className="w-4 h-4 pt-1 mr-2"/>
+            {document.title}
+        </button>
+    );
+};
+
 const Folder = ({folder})=>{
     const[open,setOpen] = useState(false);
     const handleClick = ()=> {setOpen(!open);};
