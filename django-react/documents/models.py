@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from email.policy import default
 from operator import truediv
 from django.db import models
