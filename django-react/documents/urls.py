@@ -16,5 +16,6 @@ urlpatterns = [
     path('doc/', DocumentList.as_view(), name='doc_list_and_create'),
     path('doc/<int:pk>/', DocumentSpecialOperations.as_view(), name='doc_update_and_delete'),
     path('folder/', FolderList.as_view(), name='folder_list_and_create'),
-    path('folder/<int:pk>/', FolderSpecialOperations.as_view(), name='folder_update_and_delete')
+    path('folder/<int:pk>/', FolderSpecialOperations.as_view(), name='folder_update_and_delete'),
+    path('tree', doc_and_folder_tree_view, name='doc_and_folder_tree_view'),
 ]
