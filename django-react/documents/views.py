@@ -13,25 +13,12 @@ from .serializers import *
 from documents.spellcheck import jdSpellCorrect
 
 # Create your views here.
-class FolderViewSet(viewsets.ModelViewSet):
-    serializer_class = FolderSerializer
-    queryset = FolderModel.objects.all()
-    #permission_classes = [IsAuthenticated]
-
-    def create(self, request, *args,**kwargs):
-        serializer=FolderSerializer
-        query_data=request.data
-        parentid=FolderModel.parent_id(query_data['is_root'])
-        new_query=FolderModel.objects.create(folder_id=query_data['folder_id'], user_id=query_data['user_id'], title=query_data['title'], is_root=query_data['is_root'], parent_folder_id=parentid)
-        new_query.save()
-        return Response(serializer(new_query).data, status=status.HTTP_201_CREATED)
-
 class FolderList(generics.GenericAPIView):
     serializer_class=FolderSerializer
     queryset=FolderModel.objects.all()
     def get(self, request):
         #permission_classes=[IsAuthenticated]
-        queryset=FolderModel.objects.all()
+        queryset=FolderModel.objects.all()      #queryset=FolderModel.objects.get(user=self.request.user)
         serializer=self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
@@ -49,7 +36,7 @@ class FolderSpecialOperations(generics.GenericAPIView):
     def get(self, request, pk):
         #permission_classes=[IsAuthenticated]
         try:
-            queryset_pk=FolderModel.objects.get(pk=pk)
+            queryset_pk=FolderModel.objects.get(pk=pk)        #queryset_pk=FolderModel.objects.get(pk=pk, user=self.request.user)
         except:
             return Response({'error': 'No folder found'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -57,7 +44,7 @@ class FolderSpecialOperations(generics.GenericAPIView):
         return Response(serializer.data)
     
     def put(self, request, pk):
-        queryset_pk=FolderModel.objects.get(pk=pk)
+        queryset_pk=FolderModel.objects.get(pk=pk)          #queryset_pk=FolderModel.objects.get(pk=pk, user=self.request.user)
         serializer = self.serializer_class(queryset_pk, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -65,7 +52,7 @@ class FolderSpecialOperations(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):
-        queryset_pk=FolderModel.objects.get(pk=pk)
+        queryset_pk=FolderModel.objects.get(pk=pk)          #queryset_pk=FolderModel.objects.get(pk=pk, user=self.request.user)
         queryset_pk.delete()
         return Response({'status': 'Successfully Deleted'}, status=status.HTTP_200_OK)
 
