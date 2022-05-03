@@ -6,12 +6,12 @@ from documents.models import SpellCheckModel
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = FolderModel
-        fields = ('folder_id', 'user_id', 'title', 'is_root', 'parent_folder_id')
+        fields = ('id', 'user_id', 'title', 'is_root', 'parent_folder_id')
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentModel
-        fields = ('user_id', 'title', 'content', 'folder_id') #user_id for checking purposes
+        fields = ('id', 'user_id', 'title', 'content', 'parent_folder_id') #user_id for checking purposes
 
 class SentimentSerializer(serializers.ModelSerializer):
     class Meta:
