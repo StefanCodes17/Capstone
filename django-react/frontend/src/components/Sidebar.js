@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../assets/tailwind.css"
+import axios from 'axios';
+
 import DocTree from './DocTree';
 import {Link } from 'react-router-dom'
 import Hamburger from './Hamburger'
@@ -11,42 +13,25 @@ import {getUser} from '../state/slices/userSlice'
 export default function Sidebar(){
     const [isOpen, setIsOpen] = useState(false);
     const user = useSelector(getUser);
-    const docs=[{
-        id :"",
-        user_id: "",
-        date_created:"",
-        date_modified:"",
-        title: "",
-        content:"",
-        folder_id:"",
-        children:[
-        {
-            title:"first", 
-            id:1
-        }
-        ,{
-            title:"second", 
-            id:2
-        }, 
-        {
-            title:"third",
-            id:3,
-            children:[
-                {
-                    title:"fourth",
-                    id:4
-                },
-                {
-                    title:"fifth",
-                    id:5,
-                    children:[
-                        
-                    ]
-                }   
-            ]
-        } 
-      ]
-    }];
+    const [files, setFiles] = useState([]); //contains actual tree structure
+    const [filesStatus, setFilesStatus] = useState("Loading..."); //status message
+    // Load folders and documents
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_HOST}/api/documents/tree`, {}, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("access")}`
+            },
+        }).then((response) => { //success
+            if(response.status == 200) {
+                setFiles(response.data);
+                setFilesStatus("");
+            }
+        }).catch(error => { //failure
+            setFilesStatus("Failed to fetch your files. Try reloading the page.");
+        });
+    }, []);
+
     return(
         <div style={{position: "absolute"}}>
             <Hamburger isOpen={isOpen} setIsOpen={setIsOpen}/>
@@ -63,7 +48,8 @@ export default function Sidebar(){
                     </button> */}
                 </p>
                 <hr className='shadow-sm fill-lifepad_black'/>
-                    <DocTree documents={docs}/>
+                    <p>{filesStatus}</p>
+                    <DocTree documents={files}/>
                 </div>
         </div>
     )
