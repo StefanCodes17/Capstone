@@ -58,6 +58,16 @@ export const userSlice= createSlice({
             'Content-Type': 'application/json'
           },
         }).then((res)=>{
+          state.user.refreshInterval = setInterval(()=>{
+            axios.post('api/users/token/refresh',{refresh:localStorage.getItem("refresh")})
+            .then((refreshResponse)=>{
+              localStorage.setItem("access", res.data["access"])
+            })
+            .catch((refreshError)=>{
+              alert("You will have to log back in")
+              console.log("Error with refreshing access token",refreshError) 
+            })
+          },10000)
           localStorage.setItem("access", res.data["access"])
           localStorage.setItem("refresh", res.data["refresh"])
         }).catch(function (error) {
@@ -73,6 +83,7 @@ export const userSlice= createSlice({
         });
     },
     logout: (state) => {
+      clearInterval(state.user.refreshInterval);
       state.user = null
       localStorage.removeItem("access")
       localStorage.removeItem("refresh")
