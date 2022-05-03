@@ -16,7 +16,7 @@ const Login = () => {
 
   const handleSubmit = (e) =>{
     e.preventDefault()
-    axios.post('http://localhost:8000/api/users/login', {email, password}, {
+    axios.post(`${process.env.REACT_APP_HOST}/api/users/login`, {email, password}, {
           headers:{
             'Content-Type': 'application/json'
           },

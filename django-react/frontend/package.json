@@ -35,6 +35,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^6.7.0",
+    "dotenv-webpack": "^7.1.0",
     "html-webpack-plugin": "^5.5.0",
     "postcss": "^8.4.7",
     "postcss-cli": "^9.1.0",
@@ -49,6 +50,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "axios": "^0.26.1",
+    "lodash.debounce": "^4.0.8",
+    "dotenv": "^16.0.0",
     "postcss-import": "^14.0.2",
     "react": "^17.0.2",
     "react-colorful": "^5.5.1",

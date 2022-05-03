@@ -20,7 +20,7 @@ const Signup = () => {
   const handleSubmit = (e) =>{
     e.preventDefault()
 
-    axios.post('http://localhost:8000/api/users/register', {username, email, password}, {
+    axios.post(`${process.env.REACT_APP_HOST}/api/users/register`, {username, email, password}, {
           headers:{
             'Content-Type': 'application/json'
           },
