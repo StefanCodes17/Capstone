@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.conf import settings
+import jwt
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -13,6 +15,17 @@ from .models import *
 from .serializers import *
 from documents.spellcheck import jdSpellCorrect
 from collections import defaultdict
+
+
+# Gets user if logged in, otherwise None
+def get_user(request):
+    try:
+        access = request.headers.get('Authorization').split(' ')[1]
+        user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
+        user = User.objects.get(id=user_id)
+        return user
+    except:
+        return None
 
 # Create your views here.
 class FolderViewSet(viewsets.ModelViewSet):
@@ -91,9 +104,11 @@ class DocumentList(generics.GenericAPIView):
 class DocumentSpecialOperations(generics.GenericAPIView):
     serializer_class=DocumentSerializer
     queryset=DocumentModel.objects.all()
+    permission_classes=[IsAuthenticated]
+
     def get(self, request, pk):
-        #permission_classes=[IsAuthenticated]
         try:
+            user = get_user(request)
             queryset_pk=DocumentModel.objects.get(pk=pk)
         except:
             return Response({'error': 'No document found'}, status=status.HTTP_400_BAD_REQUEST)
