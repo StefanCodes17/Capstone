@@ -46,7 +46,8 @@ class FolderSpecialOperations(generics.GenericAPIView):
     def get(self, request, pk):
         #permission_classes=[IsAuthenticated]
         try:
-            queryset_pk=FolderModel.objects.get(pk=pk)        #queryset_pk=FolderModel.objects.get(pk=pk, user=self.request.user)
+            user = get_user(request)
+            queryset_pk=FolderModel.objects.get(pk=pk, user_id=user)        #queryset_pk=FolderModel.objects.get(pk=pk, user=self.request.user)
         except:
             return Response({'error': 'No folder found'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -71,17 +72,25 @@ class DocumentList(generics.GenericAPIView):
     queryset=DocumentModel.objects.all()
     def get(self, request):
         #permission_classes=[IsAuthenticated]
-        queryset=DocumentModel.objects.all()
-        serializer=self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        try:
+            user = get_user(request)
+            queryset=DocumentModel.objects.all(user_id=user)
+            serializer=self.serializer_class(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response({'error': 'cannot look at documents, not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         #permission_classes=[IsAuthenticated]
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = get_user(request)
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save(user_id=user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'error': 'cannot create document, not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class DocumentSpecialOperations(generics.GenericAPIView):
     serializer_class=DocumentSerializer
@@ -91,7 +100,7 @@ class DocumentSpecialOperations(generics.GenericAPIView):
     def get(self, request, pk):
         try:
             user = get_user(request)
-            queryset_pk=DocumentModel.objects.get(pk=pk)
+            queryset_pk=DocumentModel.objects.get(pk=pk, user_id=user)
         except:
             return Response({'error': 'No document found'}, status=status.HTTP_400_BAD_REQUEST)
         

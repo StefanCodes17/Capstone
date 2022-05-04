@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production",
-    "watch:css": "TAILWIND_MODE=watch postcss src/assets/tailwind.css -o src/assets/main.css --watch"
+    "watch:css": "cross-env TAILWIND_MODE=watch postcss src/assets/tailwind.css -o src/assets/main.css --watch"
   },
   "repository": {
     "type": "git",
@@ -50,8 +50,9 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "axios": "^0.26.1",
-    "lodash.debounce": "^4.0.8",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
+    "lodash.debounce": "^4.0.8",
     "postcss-import": "^14.0.2",
     "react": "^17.0.2",
     "react-colorful": "^5.5.1",
