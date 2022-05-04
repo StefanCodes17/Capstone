@@ -1,18 +1,23 @@
 import React, {useState} from 'react'
 import {Link } from 'react-router-dom'
 import {useDispatch} from "react-redux" 
-import {signin} from "../state/slices/userSlice"
+import {signin, getUser} from "../state/slices/userSlice"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import { useSelector } from 'react-redux';
 
 const Login = () => {
-
+  const user = useSelector(getUser)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
+
+  if(user){
+    navigate("/")
+  }
 
   const handleSubmit = (e) =>{
     e.preventDefault()

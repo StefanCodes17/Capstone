@@ -9,7 +9,7 @@ import { HexColorPicker } from "react-colorful";
 import Navbar from './Navbar'
 import useAutosave from '../utils/useAutosave';
 
-const DocEditorHeader = ()=>{
+const DocEditorHeader = ({saving, msg})=>{
 
   const [bold, setBold] = useState(false)
   const [italics, setItalics] = useState(false)
@@ -19,40 +19,45 @@ const DocEditorHeader = ()=>{
 
 
   return(
-    <div className='pt-10 flex'>
-      {/* Type of text */}
-      <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
-        <option value="paragraph">Paragraph</option>
-        <option value="title">Title</option>
-      </select>
-      {/* Type of font */}
-      <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
-        <option value="Arial">Arial</option>
-        <option value="Comic Sans">Comic Sans</option>
-      </select>
-      {/* Font size */}
-      <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 56, 58, 60, 62, 64, 66, 68, 70, 72].map((num) =>(
-          <option value={num}>{num}px</option>
-        ))}
-      </select>
-      <div className="px-6 py-1 border border-gray-200 focus:outline-none flex w-fit">
-          <div className="flex pt-1 space-x-2">
-            <div  className='cursor-pointer' onClick={()=> setBold(!bold)}>{!bold ? <AiOutlineBold/> : <FaBold/>}</div>
-            <div  className='cursor-pointer' onClick={() => setItalics(!italics)}>{!italics ? <AiOutlineItalic/> : <FaItalic/>} </div>
-            <div  className='cursor-pointer' onClick={() => setUnderline(!underline)}>{!underline ? <AiOutlineUnderline/> : <FaUnderline/>} </div>
-          </div>
+    <div>
+      <div className='pt-10 pb-2'>
+        <p className='text-sm text-gray-500 tracking-wide'>{saving ? 'Saving ...' : msg}</p>
       </div>
-      <div className="px-6 py-1 border border-gray-200 focus:outline-none flex w-fit">
-         {/*Color Picker */}
-         <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
-           {!displayColor ? <BiFont/> : <FaFont/>}
-           <div className='w-6 h-1' style={{backgroundColor: color}}></div>
-           {displayColor &&
-          <div className='absolute -bottom-52 left-0'>
-              <HexColorPicker color={color} onChange={setColor} />
-          </div>}
-         </div>
+      <div className='flex'>
+        {/* Type of text */}
+        <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
+          <option value="paragraph">Paragraph</option>
+          <option value="title">Title</option>
+        </select>
+        {/* Type of font */}
+        <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
+          <option value="Arial">Arial</option>
+          <option value="Comic Sans">Comic Sans</option>
+        </select>
+        {/* Font size */}
+        <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 56, 58, 60, 62, 64, 66, 68, 70, 72].map((num) =>(
+            <option value={num}>{num}px</option>
+          ))}
+        </select>
+        <div className="px-6 py-1 border border-gray-200 focus:outline-none flex w-fit">
+            <div className="flex pt-1 space-x-2">
+              <div  className='cursor-pointer' onClick={()=> setBold(!bold)}>{!bold ? <AiOutlineBold/> : <FaBold/>}</div>
+              <div  className='cursor-pointer' onClick={() => setItalics(!italics)}>{!italics ? <AiOutlineItalic/> : <FaItalic/>} </div>
+              <div  className='cursor-pointer' onClick={() => setUnderline(!underline)}>{!underline ? <AiOutlineUnderline/> : <FaUnderline/>} </div>
+            </div>
+        </div>
+        <div className="px-6 py-1 border border-gray-200 focus:outline-none flex w-fit">
+          {/*Color Picker */}
+          <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
+            {!displayColor ? <BiFont/> : <FaFont/>}
+            <div className='w-6 h-1' style={{backgroundColor: color}}></div>
+            {displayColor &&
+            <div className='absolute -bottom-52 left-0'>
+                <HexColorPicker color={color} onChange={setColor} />
+            </div>}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -61,8 +66,10 @@ const DocEditorHeader = ()=>{
 
 
 
-
 const DocEditor = () => {
+
+    const [saving, setSaving] = useState(true)
+    const [msg, setMsg] = useState("")
 
     const renderElement = useCallback(props => {
         switch (props.element.type) {
@@ -86,7 +93,11 @@ const DocEditor = () => {
       []
     );
 
-    const [value, setValue] = useAutosave(loadedData);
+    const [value, setValue] = useAutosave(loadedData, (res)=>{
+      const mssg = res?.data?.message
+      setMsg(mssg)
+      setSaving(!saving)
+    });
     const onChangeContent = useCallback((newValue) => {
       // only save if text changed, not selection
       const isAstChange = editor.operations.some(
@@ -100,11 +111,14 @@ const DocEditor = () => {
 
   return (
     <div style={{width: "500px", margin: "5px auto"}}>
-    <DocEditorHeader/>
+    <DocEditorHeader saving={saving} msg={msg}/>
     <Slate
       editor={editor}
       value={value}
-      onChange={newValue => setValue(newValue)}
+      onChange={newValue => {
+        setValue(newValue)
+        setSaving(true)
+      }}
       >
         <Editable 
           renderElement={renderElement}

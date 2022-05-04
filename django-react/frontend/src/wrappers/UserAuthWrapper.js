@@ -7,7 +7,7 @@ import {getUser} from '../state/slices/userSlice'
 const UserAuthWrapper = ({children}) => {
     const user = useSelector(getUser)
 
-    return true ? (
+    return user ? (
         {...children}
     ) :(
         <Navigate to="/"/>

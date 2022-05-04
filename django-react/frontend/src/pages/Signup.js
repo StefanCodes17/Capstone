@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import {Link } from 'react-router-dom'
 import {useDispatch} from "react-redux" 
-import {signup} from "../state/slices/userSlice"
+import {signup, getUser} from "../state/slices/userSlice"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import { useSelector } from 'react-redux';
 
 const Signup = () => {
-
+  const user = useSelector(getUser)
   const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -16,6 +17,10 @@ const Signup = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
+
+  if(user){
+    navigate("/")
+  }
 
   const handleSubmit = (e) =>{
     e.preventDefault()
