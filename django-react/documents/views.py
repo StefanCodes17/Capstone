@@ -1,14 +1,9 @@
-from django.shortcuts import render
 from django.conf import settings
 import jwt
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets,status,generics
 from rest_framework.decorators import api_view
-from documents.serializers import SentimentSerializer
-from documents.models import SentimentModel
-from rest_framework.views import APIView
 from documents.sentiment import find_sentiment
 from requests import request
 from .models import *

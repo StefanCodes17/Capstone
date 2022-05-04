@@ -1,5 +1,3 @@
-from email.policy import default
-from operator import truediv
 from django.db import models
 from users.models import User
 # Create your models here.
@@ -10,16 +8,6 @@ class FolderModel(models.Model):
     title=models.CharField(max_length=255)
     is_root=models.BooleanField(default=False)
     parent_folder_id=models.ForeignKey('self', null=True, default=None, on_delete=models.CASCADE)
-
-    @property
-    def parent_id(self):
-        if(self.is_root is True):
-            self.parent_folder_id = False
-        return self.parent_folder_id
-
-    #def root(self, *args, **kwargs):
-     #   if(self.is_root == True):
-      #      self.parent_folder_id = 0
 
     def __str__(self):
         return self.title

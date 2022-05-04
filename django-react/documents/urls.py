@@ -1,6 +1,4 @@
-from sys import prefix
-from django.urls import path, re_path, include
-from . import views
+from django.urls import path, include
 from rest_framework import routers
 from .views import *
 from documents.views import SentimentViewSet
