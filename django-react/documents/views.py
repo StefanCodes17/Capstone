@@ -16,8 +16,8 @@ from .utils import Util
 # Gets user if logged in, otherwise None
 def get_user(request):
     #try:
-    #access = request.headers['HTTP_AUTHORIZATION']
-    #print(f'ACCESS = {access}')
+    access = request.headers.get('Authorization').split(' ')[1]
+    print(f'ACCESS = {access}')
     #access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUxOTYxMTk5LCJpYXQiOjE2NTE5NTg0OTksImp0aSI6ImI0ZDhiNTY1NjcyZTRjYTE4MzMxZGFjYmZkNTFjMmFkIiwidXNlcl9pZCI6MX0.0Odx7_DQ1EVrcklDS4T-Ty4mLWSnsc_GbW8aC6vE22E"
     user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
     print(user_id)
@@ -90,7 +90,7 @@ class DocumentList(generics.GenericAPIView):
         #permission_classes=[IsAuthenticated]
         #try:
         #user = get_user(request)
-        #print(f'user = {request.lifepad_user}')
+        print(f'user = {request.lifepad_user}')
         queryset=DocumentModel.objects.filter(user_id=request.lifepad_user)
         serializer=self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
