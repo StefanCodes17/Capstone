@@ -14,22 +14,19 @@ import {Provider} from "react-redux"
 import store from "./state/app/store"
 import UserAuthWrapper from './wrappers/UserAuthWrapper'
 import {useDispatch, useSelector} from "react-redux" 
-import {signin, getUser} from "../src/state/slices/userSlice"
+import {signin, getUser, fetchUser} from "../src/state/slices/userSlice"
 import api from '../config'
 
 const App = () => {
+    // Checks if user is logged in already
     const user = useSelector(getUser)
-    const dispatch = useDispatch(signin())
+    const dispatch = useDispatch()
+    // If session hasn't expired yet, but the tab is being reopened, then try
+    // to reload the User model from the server. If you were never logged in or
+    // session expired, then this does nothing
     useEffect(()=>{
-        if(!user){
-            api.post(`/api/users/get_user`).then(res=>{
-                dispatch(signin({
-                  ...res.data,
-                  isLoggedIn: true
-                }))
-              }).catch(err =>{
-                console.log(err)
-              })
+        if(!user.isLoggedIn){
+            dispatch(fetchUser());
         }
     }, [])
 
@@ -38,9 +35,13 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<HomePage />}/>
-                <Route path="signup" element={<Signup/>}/> 
-                <Route path="login" element={<Login/>}/>
-                    <Route path="dashboard" element={
+                <Route path="signup" element={
+                    <UserAuthWrapper unauthorized={true}><Signup/></UserAuthWrapper>
+                }/>
+                <Route path="login" element={
+                    <UserAuthWrapper unauthorized={true}><Login/></UserAuthWrapper>
+                } />
+                <Route path="dashboard" element={
                     <UserAuthWrapper>
                         <Dashboard/>
                     </UserAuthWrapper>
@@ -49,7 +50,7 @@ const App = () => {
                     <UserAuthWrapper>
                         <DocEditor/>
                     </UserAuthWrapper>
-                    } />
+                } />
                 <Route path="*" element={<Navigate to="/"/>}></Route>
             </Routes>
         </Router>
