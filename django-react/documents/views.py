@@ -10,17 +10,23 @@ from .models import *
 from .serializers import *
 from documents.spellcheck import jdSpellCorrect
 from collections import defaultdict
+from .utils import Util
 
 
 # Gets user if logged in, otherwise None
 def get_user(request):
-    try:
-        access = request.headers.get('Authorization').split(' ')[1]
-        user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
-        user = User.objects.get(id=user_id)
-        return user
-    except:
-        return None
+    #try:
+    #access = request.headers['HTTP_AUTHORIZATION']
+    #print(f'ACCESS = {access}')
+    #access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUxOTYxMTk5LCJpYXQiOjE2NTE5NTg0OTksImp0aSI6ImI0ZDhiNTY1NjcyZTRjYTE4MzMxZGFjYmZkNTFjMmFkIiwidXNlcl9pZCI6MX0.0Odx7_DQ1EVrcklDS4T-Ty4mLWSnsc_GbW8aC6vE22E"
+    user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
+    print(user_id)
+    user = User.objects.get(id=user_id)
+    print(user)
+    return user
+    #except:
+        #print(f'ACCESS = NOTHING')
+        #return None
 
 # Create your views here.
 class FolderList(generics.GenericAPIView):
@@ -28,17 +34,25 @@ class FolderList(generics.GenericAPIView):
     queryset=FolderModel.objects.all()
     def get(self, request):
         #permission_classes=[IsAuthenticated]
-        queryset=FolderModel.objects.all()      #queryset=FolderModel.objects.get(user=self.request.user)
-        serializer=self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        try:
+            user = get_user(request)
+            queryset=FolderModel.objects.filter(user_id=user)
+            serializer=self.serializer_class(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response({'error': 'cannot look at folders, not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         #permission_classes=[IsAuthenticated]
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = get_user(request)
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save(user_id=user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'error': 'cannot create document, not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class FolderSpecialOperations(generics.GenericAPIView):
     serializer_class=FolderSerializer
@@ -55,10 +69,11 @@ class FolderSpecialOperations(generics.GenericAPIView):
         return Response(serializer.data)
     
     def put(self, request, pk):
+        user = get_user(request)
         queryset_pk=FolderModel.objects.get(pk=pk)          #queryset_pk=FolderModel.objects.get(pk=pk, user=self.request.user)
         serializer = self.serializer_class(queryset_pk, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user_id=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -70,15 +85,17 @@ class FolderSpecialOperations(generics.GenericAPIView):
 class DocumentList(generics.GenericAPIView):
     serializer_class=DocumentSerializer
     queryset=DocumentModel.objects.all()
+    #permission_classes = [IsAuthenticated]
     def get(self, request):
         #permission_classes=[IsAuthenticated]
-        try:
-            user = get_user(request)
-            queryset=DocumentModel.objects.all(user_id=user)
-            serializer=self.serializer_class(queryset, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            return Response({'error': 'cannot look at documents, not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
+        #try:
+        #user = get_user(request)
+        #print(f'user = {request.lifepad_user}')
+        queryset=DocumentModel.objects.filter(user_id=request.lifepad_user)
+        serializer=self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        #except:
+            #return Response({'error': 'cannot look at documents, not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         #permission_classes=[IsAuthenticated]
@@ -95,7 +112,7 @@ class DocumentList(generics.GenericAPIView):
 class DocumentSpecialOperations(generics.GenericAPIView):
     serializer_class=DocumentSerializer
     queryset=DocumentModel.objects.all()
-    permission_classes=[IsAuthenticated]
+    #permission_classes=[IsAuthenticated]
 
     def get(self, request, pk):
         try:
@@ -108,15 +125,16 @@ class DocumentSpecialOperations(generics.GenericAPIView):
         return Response(serializer.data)
     
     def put(self, request, pk):
-        queryset_pk=DocumentModel.objects.get(doc_id=pk)
+        user = get_user(request)
+        queryset_pk=DocumentModel.objects.get(pk=pk)
         serializer = self.serializer_class(queryset_pk, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user_id=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):
-        queryset_pk=DocumentModel.objects.get(doc_id=pk)
+        queryset_pk=DocumentModel.objects.get(pk=pk)
         queryset_pk.delete()
         return Response({'status': 'Successfully Deleted'}, status=status.HTTP_200_OK)
 
@@ -125,8 +143,9 @@ class DocumentSpecialOperations(generics.GenericAPIView):
 @api_view(["GET"])
 def doc_and_folder_tree_view(request):
     try:
-        documents = DocumentSerializer(DocumentModel.objects.all(), many=True).data
-        folders = FolderSerializer(FolderModel.objects.all(), many=True).data
+        user = get_user(request)
+        documents = DocumentSerializer(DocumentModel.objects.filter(user_id=user), many=True).data
+        folders = FolderSerializer(FolderModel.objects.filter(user_id=user), many=True).data
         # this makes it easier to find folders by id
         folders_by_id = {}
         # this will contain nested file structure
