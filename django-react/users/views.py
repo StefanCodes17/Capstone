@@ -49,12 +49,16 @@ class GetUser(generics.GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         access = request.headers.get('Authorization').split(' ')[1]
         print("Get access token:", access)
         user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
-        user = User.objects.get(id=user_id)
-        return Response({"email": user.email, "username": user.username}, status=status.HTTP_201_CREATED)
+        #user = User.objects.get(id=user_id)
+        user = request.lifepad_user
+        if user:
+            return Response({"email": user.email, "username": user.username}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Not logged in"}, status=status.HTTP_404_NOT_FOUND)
 
 class UserListCreateAPIView(generics.ListCreateAPIView):
     queryset = User.objects.all()

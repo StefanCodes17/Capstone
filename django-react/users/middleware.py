@@ -12,14 +12,15 @@ class TokenMiddleware:
         # the view (and later middleware) are called.
 
         try:
-            print(f"header : {request.headers}")
+            print(f"Middleware : {request.headers.get('Authorization')}")
             access = request.headers.get('Authorization').split(' ')[1]
             #access = 
             user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
             request.lifepad_user = User.objects.get(id=user_id)
+            print("Middleware: succesfully deserialized user")
         except:
             request.lifepad_user = None
-            print('failed to get user auth token')
+            print("Middleware failed to deserialize user")
         
         response = self.get_response(request)
 
