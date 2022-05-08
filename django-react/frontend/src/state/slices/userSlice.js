@@ -44,9 +44,24 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
+/**
+ * This thunk is for creating a user.
+ * @param newCredentials  an object with username, email, password
+ */
+export const signup = createAsyncThunk(
+  'user/signup',
+  (newCredentials, thunkAPI) => {
+    return (
+      api.post("/api/users/register", newCredentials)
+      .then(response => response.data)
+    );
+  }
+);
+
 
 const loggedOutUser = {
   isLoggedIn: false,
+  created: false,
   loading: false,
   error: false,
 };
@@ -55,9 +70,6 @@ export const userSlice= createSlice({
   name: 'user',
   initialState: Object.assign({}, loggedOutUser),
   reducers: {
-    signup: (state, action) => {
-      state.user = {...action.payload}
-    },
     logout: (state) => {
       state.isLoggedIn = false;
       localStorage.removeItem("access")
@@ -83,15 +95,35 @@ export const userSlice= createSlice({
       state.loading = false;
       state.error = true;
     })
+    // fetchUser
     .addCase(fetchUser.fulfilled, (state, action) => {
       Object.assign(state, action.payload);
       state.isLoggedIn = true;
+    })
+    // sign up
+    .addCase(signup.pending, (state, action) => {
+      state.isLoggedIn = false;
+      state.created = false;
+      state.loading = true;
+      state.error = false;
+    })
+    .addCase(signup.fulfilled, (state, action) => {
+      state.isLoggedIn = false;
+      state.created = true;
+      state.loading = false;
+      state.error = false;
+    })
+    .addCase(signup.rejected, (state, action) => {
+      state.isLoggedIn = false;
+      state.created = false;
+      state.loading = false;
+      state.error = true;
     })
   },
 });
 
 
-export const { signup, logout } = userSlice.actions
+export const { logout } = userSlice.actions
 
 /**
  * This is a selector, which retrieves the logged in User model from the redux state
