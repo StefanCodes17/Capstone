@@ -19,7 +19,7 @@ class TokenMiddleware:
             request.lifepad_user = User.objects.get(id=user_id)
         except:
             request.lifepad_user = None
-            print('failed to get user auth token')
+            print('Middleware: failed to get user auth token')
         
         response = self.get_response(request)
 
