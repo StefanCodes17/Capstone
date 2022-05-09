@@ -7,11 +7,13 @@ class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = FolderModel
         fields = ('id', 'user_id', 'title', 'is_root', 'parent_folder_id')
+        read_only_fields=['user_id']
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentModel
-        fields = ('id', 'user_id', 'title', 'content', 'parent_folder_id') #user_id for checking purposes
+        fields = ('user_id', 'id', 'date_created','date_modified', 'title', 'content', 'parent_folder_id')
+        read_only_fields=('user_id', 'date_created','date_modified')
 
 class SentimentSerializer(serializers.ModelSerializer):
     class Meta:

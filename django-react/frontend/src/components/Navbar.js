@@ -25,7 +25,7 @@ const Navbar = () => {
 				<div className="flex md:order-2">
 					{/* <Link to={!user?.isLoggedIn ? `signup` : ``} > */}
 						{!user?.isLoggedIn ? (
-							<Link to= "signup">
+							<Link to= "login">
 								<button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sign In</button>
 							</Link>
 						):(
@@ -47,7 +47,6 @@ const Navbar = () => {
 									</Link>
 									<div onClick={()=> {
 											dispatch(logout())
-											navigate("/")
 										}}>
 										<button className='bg-lifepad_green text-lifepad_black hover:text-white inline-block font-medium text-xs uppercase rounded shadow-md drop-shadow-md hover:bg-red-600 hover:shadow-lg focus:bg-green-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-400 active:shadow-lg transition duration-150 ease-in-out h-5 w-15 align-middle'>
 											<h2 className="pr-1 pl-1">Logout</h2>
