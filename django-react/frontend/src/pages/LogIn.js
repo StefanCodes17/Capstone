@@ -3,11 +3,10 @@ import {Link } from 'react-router-dom'
 import {useDispatch} from "react-redux" 
 import {signin, getUser} from "../state/slices/userSlice"
 import { useNavigate } from "react-router-dom";
-import axios from 'axios'
+import api from '../../config';
 import { useSelector } from 'react-redux';
 
 const Login = () => {
-  const user = useSelector(getUser)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
@@ -15,36 +14,12 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  if(user){
-    navigate("/")
-  }
-
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault()
-    axios.post(`${process.env.REACT_APP_HOST}/api/users/login`, {email, password}, {
-          headers:{
-            'Content-Type': 'application/json'
-          },
-        }).then((res)=>{
-          dispatch(signin({
-            ...res.data,
-            password: password,
-            isLoggedIn: true
-          }))
-          navigate("/")
-        })
-        .catch(function (error) {
-          if (error.response) {
-            // Request made and server responded
-            setError(true)
-          } else if (error.request) {
-            // The request was made but no response was received
-            console.log("Error with connecting to server", error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-        });
+    dispatch(signin({
+      email,
+      password
+    }));
   }
 
 

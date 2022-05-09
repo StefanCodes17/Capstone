@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/tailwind.css"
-import axios from 'axios';
+import api from '../../config';
 
 import DocTree from './DocTree';
 import {Link } from 'react-router-dom'
@@ -11,18 +11,15 @@ import {useSelector} from "react-redux"
 import {getUser} from '../state/slices/userSlice'
 
 export default function Sidebar(){
+    // whether hamburger menu is open or closed
     const [isOpen, setIsOpen] = useState(false);
+    // logged in user
     const user = useSelector(getUser);
     const [files, setFiles] = useState([]); //contains actual tree structure
-    const [filesStatus, setFilesStatus] = useState("Loading..."); //status message
+    const [filesStatus, setFilesStatus] = useState("Loading..."); //status message for files
     // Load folders and documents
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_HOST}/api/documents/tree`, {}, {
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("access")}`
-            },
-        }).then((response) => { //success
+        api.get('/api/documents/tree').then((response) => { //success
             if(response.status == 200) {
                 setFiles(response.data);
                 setFilesStatus("");
