@@ -23,29 +23,6 @@ const Signup = () => {
       email,
       password,
     }));
-    // axios.post(`${process.env.REACT_APP_HOST}/api/users/register`, {username, email, password}, {
-    //       headers:{
-    //         'Content-Type': 'application/json'
-    //       },
-    //     }).then((res)=>{
-    //       dispatch(signup({
-    //         ...res.data,
-    //         isLoggedIn: false
-    //       }))
-    //       navigate("/")
-    //     })
-    //     .catch(function (error) {
-    //       if (error.response) {
-    //         // Request made and server responded
-    //         setError(true)
-    //       } else if (error.request) {
-    //         // The request was made but no response was received
-    //         console.log("Error with connecting to server", error.request);
-    //       } else {
-    //         // Something happened in setting up the request that triggered an Error
-    //         console.log('Error', error.message);
-    //       }
-    //     });
   }
 
 

@@ -10,7 +10,6 @@ const Navbar = () => {
 	const navigate = useNavigate()
 
 	const [showDropdown,setShowDropdown]=useState(false)
-	const [counter, setCounter] = useState(0)
 	const user = useSelector(getUser)
 	const currentRoute=useLocation().pathname
 
