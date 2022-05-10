@@ -154,6 +154,9 @@ def doc_and_folder_tree_view(request):
         buckets = defaultdict(list)
         # sort all folders by parent folder
         for f in folders:
+            # by default, folders have no children (empty list)
+            f['children'] = []
+            # lookup table
             folders_by_id[f['id']] = f
             if f['parent_folder_id'] != None:
                 buckets[f['parent_folder_id']].append(f)
