@@ -16,4 +16,5 @@ class SpellCheckAdmin(admin.ModelAdmin):
 
 admin.site.register(FolderModel, FolderAdmin)
 admin.site.register(DocumentModel, DocumentAdmin)
-admin.site.register(SentimentModel,SentimentAdmin)
+admin.site.register(SentimentModel, SentimentAdmin)
+admin.site.register(SpellCheckModel, SpellCheckAdmin)

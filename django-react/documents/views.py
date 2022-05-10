@@ -10,7 +10,7 @@ from .models import *
 from .serializers import *
 from documents.spellcheck import jdSpellCorrect
 from collections import defaultdict
-from .utils import Util
+#from .utils import Util
 
 
 # Gets user if logged in, otherwise None
@@ -182,8 +182,11 @@ class SentimentViewSet(viewsets.ModelViewSet):
         serializer=SentimentSerializer
         query_data=request.data
         sentiment_analysis=find_sentiment(str(query_data['query_string']))
-        new_query=SentimentModel.objects.create(query_string=query_data['query_string'], raw_score=sentiment_analysis[1],sentiment=sentiment_analysis[0]);
-        new_query.save()
+        try:
+            new_query= SentimentModel.objects.get(query_string=request.data['query_string'])
+        except SentimentModel.DoesNotExist:
+            new_query=SentimentModel.objects.create(query_string=query_data['query_string'], raw_score=sentiment_analysis[1],sentiment=sentiment_analysis[0]);
+            new_query.save()
         return Response(serializer(new_query).data, status=status.HTTP_201_CREATED)
     
 class SpellCheckViewSet(viewsets.ModelViewSet):

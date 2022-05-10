@@ -7,6 +7,7 @@ import nltk
 #when below dowloaded one time you can comment it out
 nltk.download('wordnet')
 nltk.download('omw-1.4')
+nltk.download('averaged_perceptron_tagger')
 from nltk import tokenize
 from nltk.corpus import wordnet
 from nltk import pos_tag
