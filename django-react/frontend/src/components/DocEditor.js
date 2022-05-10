@@ -8,6 +8,7 @@ import { HexColorPicker } from "react-colorful";
 
 import Navbar from './Navbar'
 import useAutosave from '../utils/useAutosave';
+import SentimentView from '../components/SentimentView';
 
 const DocEditorHeader = ({saving, msg})=>{
 
@@ -67,7 +68,7 @@ const DocEditorHeader = ({saving, msg})=>{
 
 
 const DocEditor = () => {
-
+    const [selectedText,setSelectedText] = useState("")
     const [saving, setSaving] = useState(true)
     const [msg, setMsg] = useState("")
 
@@ -106,20 +107,38 @@ const DocEditor = () => {
       if (isAstChange) {
         // Save the value to Local Storage.
         setValue(newValue);
+        setSaving(true);
       }
     });
+  let handleSentiment = () =>{
+    setSelectedText(Editor.string(editor, editor.selection));
+  }
 
   return (
     <div style={{width: "500px", margin: "5px auto"}}>
     <DocEditorHeader saving={saving} msg={msg}/>
+    <button onClick={handleSentiment}>
+      Sentiment
+    </button>
+    
+    { 
+      selectedText && 
+      <div style={{
+        position:"absolute",
+        zIndex: 100,
+        left: 40,
+        top: 40,
+      }}>
+        <button className=' text-2xl text-red-700' onClick={()=>setSelectedText("")}>x</button>
+        <SentimentView sentimentSentence={selectedText}/>
+      </div>
+    }
+
     <Slate
       editor={editor}
       value={value}
-      onChange={newValue => {
-        setValue(newValue)
-        setSaving(true)
-      }}
-      >
+      onChange={ onChangeContent}
+    >
         <Editable 
           renderElement={renderElement}
           onKeyDown={event => {

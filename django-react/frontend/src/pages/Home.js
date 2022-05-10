@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Main from '../components/Main'
-import axios from "axios"
+
 
 const HomePage = () => {
 
 	return (
 		<div className='bg-lifepad_black h-screen w-screen'>
 			<div className="h-screen max-w-screen-3xl overflow-hidden">
-				<Navbar />
+				<Navbar/>
 				<Main/>
 			</div>
 		</div>
