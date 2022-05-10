@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import DocEditor from './components/DocEditor'
+import NewDoc from './pages/NewDoc'
 
 import {Provider} from "react-redux"
 import store from "./state/app/store"
@@ -51,7 +52,17 @@ const App = () => {
                         <DocEditor/>
                     </UserAuthWrapper>
                 } />
-                <Route path="*" element={<Navigate to="/"/>}></Route>
+                <Route path="new-doc" element={
+                    <UserAuthWrapper>
+                        <NewDoc />
+                    </UserAuthWrapper>
+                } />
+                <Route path="/doc/:id" element={
+                    <UserAuthWrapper>
+                        <Dashboard />
+                    </UserAuthWrapper>
+                } />
+                <Route path="*" element={<Navigate to="/"/>} />
             </Routes>
         </Router>
     );

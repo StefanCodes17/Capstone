@@ -35,7 +35,7 @@ export default function Sidebar(){
             <div className={`bg-sidebar_background_color w-80 h-screen shadow-xl ${isOpen?'translate-x-0':'-translate-x-full'} ease-in-out duration-300 relative`} style={{zIndex: 100}}>
                 <p className="pl-1 leading-10 text-left font-sans font-bold text-lifepad_black text-2xl truncate border-r-[40px] border-transparent">
                     Hi, {user?.username}
-                    <Link to="/editor">
+                    <Link to="/new-doc">
                         <button className="absolute right-0 bg-transparent"> 
                             <RiAddBoxLine className='h-10 w-10 fill-lifepad_black hover:fill-lifepad_green'/>
                         </button>
