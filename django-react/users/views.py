@@ -27,7 +27,6 @@ def intro_doc(request):
         }
     folder_data2 = {
             'title': 'Template Sub-Folder',
-            'parent_folder_id': 1
         }
     
     doc_data = {
@@ -37,12 +36,10 @@ def intro_doc(request):
     doc_data2 = {
             'title': 'Sample Document in Sub-Folder',
             'content': 'As you can see, the ability of creating subfolders is in the power of your hands. Take this opportunity to make your life more organized!',
-            'parent_folder_id': 2
         }
     doc_data3 = {
             'title': 'Sample Document in Folder',
             'content': 'The ability of creating documents within a folder is in the power of your hands. Take this opportunity to make your life more organized!',
-            'parent_folder_id': 1
         }
     
     folder_serializer = FolderSerializer(data=folder_data)
@@ -50,16 +47,20 @@ def intro_doc(request):
     doc_serializer = DocumentSerializer(data=doc_data)
     doc_serializer2 = DocumentSerializer(data=doc_data2)
     doc_serializer3 = DocumentSerializer(data=doc_data3)
+    first_folder_id = folder_serializer
+    second_folder_id = folder_serializer2
     if folder_serializer.is_valid():
+        first_folder_id = folder_serializer.save(user_id=request.lifepad_user)
         folder_serializer.save(user_id=request.lifepad_user)
     if folder_serializer2.is_valid():
-        folder_serializer2.save(user_id=request.lifepad_user)
+        second_folder_id = folder_serializer2.save(user_id=request.lifepad_user)
+        folder_serializer2.save(user_id=request.lifepad_user, parent_folder_id=first_folder_id)
     if doc_serializer.is_valid():
         doc_serializer.save(user_id=request.lifepad_user)
     if doc_serializer2.is_valid():
-        doc_serializer2.save(user_id=request.lifepad_user)
+        doc_serializer2.save(user_id=request.lifepad_user, parent_folder_id=second_folder_id)
     if doc_serializer3.is_valid():
-        doc_serializer3.save(user_id=request.lifepad_user)
+        doc_serializer3.save(user_id=request.lifepad_user, parent_folder_id=first_folder_id)
 
 class GetUser(generics.GenericAPIView):
     queryset = User.objects.all()
