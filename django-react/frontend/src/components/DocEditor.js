@@ -3,6 +3,7 @@ import { createEditor, Editor, Transforms } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import {AiOutlineBold, AiOutlineItalic, AiOutlineUnderline} from 'react-icons/ai'
 import {FaBold, FaItalic, FaUnderline, FaFont} from 'react-icons/fa'
+import {BiChevronDownSquare} from 'react-icons/bi'
 import {BiFont} from 'react-icons/bi'
 import { HexColorPicker } from "react-colorful";
 
@@ -26,29 +27,29 @@ const DocEditorHeader = ({saving, msg})=>{
       </div>
       <div className='flex'>
         {/* Type of text */}
-        <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
+        <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
           <option value="paragraph">Paragraph</option>
           <option value="title">Title</option>
         </select>
         {/* Type of font */}
-        <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
+        <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
           <option value="Arial">Arial</option>
           <option value="Comic Sans">Comic Sans</option>
         </select>
         {/* Font size */}
-        <select name="type" id="type" className="px-6 py-1 border border-gray-200 focus:outline-none">
+        <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 56, 58, 60, 62, 64, 66, 68, 70, 72].map((num) =>(
             <option value={num}>{num}px</option>
           ))}
         </select>
-        <div className="px-6 py-1 border border-gray-200 focus:outline-none flex w-fit">
+        <div className="px-6 py-1 border border-lifepad_black focus:outline-none flex w-fit">
             <div className="flex pt-1 space-x-2">
               <div  className='cursor-pointer' onClick={()=> setBold(!bold)}>{!bold ? <AiOutlineBold/> : <FaBold/>}</div>
               <div  className='cursor-pointer' onClick={() => setItalics(!italics)}>{!italics ? <AiOutlineItalic/> : <FaItalic/>} </div>
               <div  className='cursor-pointer' onClick={() => setUnderline(!underline)}>{!underline ? <AiOutlineUnderline/> : <FaUnderline/>} </div>
             </div>
         </div>
-        <div className="px-6 py-1 border border-gray-200 focus:outline-none flex w-fit">
+        <div className="px-6 py-1 border border-lifepad_black focus:outline-none flex w-fit">
           {/*Color Picker */}
           <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
             {!displayColor ? <BiFont/> : <FaFont/>}
@@ -68,6 +69,7 @@ const DocEditorHeader = ({saving, msg})=>{
 
 
 const DocEditor = () => {
+    const [fullText, setFullText]=useState("");
     const [selectedText,setSelectedText] = useState("")
     const [saving, setSaving] = useState(true)
     const [msg, setMsg] = useState("")
@@ -109,30 +111,33 @@ const DocEditor = () => {
         setValue(newValue);
         setSaving(true);
       }
+      if(editor.selection){
+        setSelectedText(Editor.string(editor, editor.selection));
+      }
+      else{
+        setSelectedText("");
+      }
+      
+      //Get all text from the current document and set fullText
+      let alltext="";
+      //Iterate through the paragraphs
+      for (const text of (editor.children)) {
+        alltext+=text.children[0].text;
+      }
+      if(alltext.trim()){
+        setFullText(alltext);
+      }
+      else{
+        setFullText("");
+      }
     });
-  let handleSentiment = () =>{
-    setSelectedText(Editor.string(editor, editor.selection));
-  }
 
   return (
     <div style={{width: "500px", margin: "5px auto"}}>
     <DocEditorHeader saving={saving} msg={msg}/>
-    <button onClick={handleSentiment}>
-      Sentiment
-    </button>
+    <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
+    {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}
     
-    { 
-      selectedText && 
-      <div style={{
-        position:"absolute",
-        zIndex: 100,
-        left: 40,
-        top: 40,
-      }}>
-        <button className=' text-2xl text-red-700' onClick={()=>setSelectedText("")}>x</button>
-        <SentimentView sentimentSentence={selectedText}/>
-      </div>
-    }
 
     <Slate
       editor={editor}
@@ -141,6 +146,7 @@ const DocEditor = () => {
     >
         <Editable 
           renderElement={renderElement}
+          spellCheck={true}
           onKeyDown={event => {
             if (event.key === '`' && event.ctrlKey) {
               event.preventDefault()
