@@ -19,32 +19,6 @@ from decouple import config
 import pprint
 from documents.serializers import DocumentSerializer, FolderSerializer
 
-# from users.serializers import UserSerializer
-
-# from django.contrib.auth.models import User
-
-# def document_library(request):
-# 	data = [
-#         {
-#         'filename': "Lab Notes",
-#         'create_date': "2022-03-09 11:00:00",
-#         'modified_date': "2022-03-09 13:00:00",
-#         'id': 1
-#         },
-#         {
-#         'filename': "Todo",
-#         'create_date': "2022-03-10 11:00:00",
-#         'modified_date': "2022-03-10 11:30:00",
-#         'id': 2
-#         },
-#         {
-#         'filename': "Freewriting March 15",
-#         'create_date': "2022-03-11 11:00:00",
-#         'modified_date': "2022-03-09 13:00:00",
-#         'id': 3
-#         },
-# 	]
-# 	return Response(data, safe=False)
 
 def intro_doc(request):
     folder_data = {
