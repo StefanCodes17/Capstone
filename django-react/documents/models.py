@@ -14,7 +14,7 @@ class FolderModel(models.Model):
 
 class DocumentModel(models.Model):
     id=models.AutoField(primary_key=True)
-    user_id=models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id=models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
     date_modified=models.DateTimeField(auto_now=True)
     title=models.CharField(max_length=255)

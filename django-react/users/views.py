@@ -17,6 +17,7 @@ from django.urls import reverse
 import jwt
 from decouple import config
 import pprint
+from documents.serializers import DocumentSerializer, FolderSerializer
 
 # from users.serializers import UserSerializer
 
@@ -45,6 +46,47 @@ import pprint
 # 	]
 # 	return Response(data, safe=False)
 
+def intro_doc(request):
+    folder_data = {
+            'title': 'Template Folder',
+            'is_root': True
+        }
+    folder_data2 = {
+            'title': 'Template Sub-Folder',
+            'parent_folder_id': 1
+        }
+    
+    doc_data = {
+            'title': 'Welcome',
+            'content': 'Welcome to LifePad! Here you can get started by creating a document or folder. Have fun creating your life stories with LifePad!'
+        }
+    doc_data2 = {
+            'title': 'Sample Document in Sub-Folder',
+            'content': 'As you can see, the ability of creating subfolders is in the power of your hands. Take this opportunity to make your life more organized!',
+            'parent_folder_id': 2
+        }
+    doc_data3 = {
+            'title': 'Sample Document in Folder',
+            'content': 'The ability of creating documents within a folder is in the power of your hands. Take this opportunity to make your life more organized!',
+            'parent_folder_id': 1
+        }
+    
+    folder_serializer = FolderSerializer(data=folder_data)
+    folder_serializer2 = FolderSerializer(data=folder_data2)
+    doc_serializer = DocumentSerializer(data=doc_data)
+    doc_serializer2 = DocumentSerializer(data=doc_data2)
+    doc_serializer3 = DocumentSerializer(data=doc_data3)
+    if folder_serializer.is_valid():
+        folder_serializer.save(user_id=request.lifepad_user)
+    if folder_serializer2.is_valid():
+        folder_serializer2.save(user_id=request.lifepad_user)
+    if doc_serializer.is_valid():
+        doc_serializer.save(user_id=request.lifepad_user)
+    if doc_serializer2.is_valid():
+        doc_serializer2.save(user_id=request.lifepad_user)
+    if doc_serializer3.is_valid():
+        doc_serializer3.save(user_id=request.lifepad_user)
+
 class GetUser(generics.GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -56,6 +98,10 @@ class GetUser(generics.GenericAPIView):
         #user = User.objects.get(id=user_id)
         user = request.lifepad_user
         if user:
+            if user.initial_login:
+                intro_doc(request)
+                user.initial_login = False
+                user.save()
             return Response({"email": user.email, "username": user.username}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Not logged in"}, status=status.HTTP_404_NOT_FOUND)
