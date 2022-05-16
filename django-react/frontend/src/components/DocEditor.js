@@ -133,7 +133,7 @@ const DocEditor = () => {
     });
 
   return (
-    <div style={{width: "500px", margin: "5px auto"}}>
+    <div style={{width: "600px", margin: "5px auto"}}>
     <DocEditorHeader saving={saving} msg={msg}/>
     <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
     {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}

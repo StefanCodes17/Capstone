@@ -61,35 +61,32 @@ class SentimentView extends Component {
         
 
         return(
-            // <div className="absolute w-48 bg-lifepad_green rounded-lg shadow border-2 border-lifepad_black text-lg font-serif animate-bounce text-center">
-            //     Loading...
-            // </div>
-            <div className='flex z-100'>
-                <div className='px-1 py-1 border border-lifepad_black font-semibold bg-lifepad_black text-white'>
+            <div className='z-100'>
+                <div className='px-1 py-1 w-20 inline-block text-center border border-lifepad_black font-semibold bg-lifepad_black text-white'>
                     {this.props.sentimentType}
                 </div>
-                <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+                <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                     Score:
                 </div>
-                <div className={'px-2 py-1 border  border-l-0 border-lifepad_black font-semibold'}>
+                <div className={'px-1 py-1 w-[4.25rem] border text-center inline-block border-l-0 border-lifepad_black font-semibold '+textCol}>
                     <div className='animate-bounce'>...</div>
                 </div>
-                <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+                <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                     Sentiment:
                 </div>
-                <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold'}>
+                <div className={'px-2 py-1 w-[5rem] text-center border inline-block border-l-0 border-lifepad_black font-semibold '+bgcol}>
                     <div className='animate-bounce'>...</div>
                 </div>
-                <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+                <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                     Length:
                 </div>
-                <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold'}>
+                <div className={'px-2 py-1 w-[3rem] text-center border inline-block border-l-0 border-lifepad_black font-semibold'}>
                     <div className='animate-bounce'>...</div>
                 </div>
-                <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+                <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                     Words:
                 </div>
-                <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold'}>
+                <div className={'px-2 py-1 w-[3rem] text-center border inline-block border-l-0 border-lifepad_black font-semibold'}>
                     <div className='animate-bounce'>...</div>
                 </div>
             </div>
@@ -121,32 +118,32 @@ class SentimentView extends Component {
     }
     
     return (
-        <div className='flex z-100'>
-            <div className='px-1 py-1 border border-lifepad_black font-semibold bg-lifepad_black text-white'>
+        <div className='z-100'>
+            <div className='px-1 py-1 w-20 inline-block text-center border border-lifepad_black font-semibold bg-lifepad_black text-white'>
                 {this.props.sentimentType}
             </div>
-            <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+            <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                 Score:
             </div>
-            <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold '+textCol}>
+            <div className={'px-1 py-1 w-[4.25rem] border text-center inline-block border-l-0 border-lifepad_black font-semibold '+textCol}>
                 {this.state.sentimentScore}
             </div>
-            <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+            <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                 Sentiment:
             </div>
-            <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold '+bgcol}>
+            <div className={'px-2 py-1 w-[5rem] text-center border inline-block border-l-0 border-lifepad_black font-semibold '+bgcol}>
                 {this.state.sentiment}
             </div>
-            <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+            <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                 Length:
             </div>
-            <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold'}>
+            <div className={'px-2 py-1 w-[3rem] text-center border inline-block border-l-0 border-lifepad_black font-semibold'}>
                 {this.props.sentimentSentence.length}
             </div>
-            <div className='px-1 py-1 border border-lifepad_black font-semibold shadow-inner'>
+            <div className='px-1 py-1 border inline-block border-lifepad_black font-semibold shadow-inner'>
                 Words:
             </div>
-            <div className={'px-2 py-1 border border-l-0 border-lifepad_black font-semibold'}>
+            <div className={'px-2 py-1 w-[3rem] text-center border inline-block border-l-0 border-lifepad_black font-semibold'}>
                 {countWords(this.props.sentimentSentence)}
             </div>
         </div>
