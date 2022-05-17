@@ -1,8 +1,4 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const htmlPlugin = new HtmlWebPackPlugin({
- template: "./templates/frontend/index.html",
- filename: "./index.html"
-});
 const path = require('path')
 const webpack = require('webpack')
 const Dotenv = require('dotenv-webpack');
@@ -11,9 +7,22 @@ const Dotenv = require('dotenv-webpack');
 module.exports = (env, argv) => {
   const mode = argv.mode || 'development'; // dev mode by default
 
-  return{
+  let htmlPlugin;
+  if(mode == 'development') {
+    htmlPlugin = new HtmlWebPackPlugin({
+      template: "./templates/frontend/index.html",
+      filename: "./index.html"
+    });
+  } else {
+    htmlPlugin = new HtmlWebPackPlugin({
+      template: "./templates/frontend/index_lodash_template.html",
+      filename: "index.html"
+    });
+  }
+
+  return {
     mode: mode,
-    stats:{
+    stats: {
       children: true
     },
     entry: './src/index.js',
@@ -21,9 +30,9 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, './static/frontend'),
       filename: '[name].js',
     },
-      module: {
-        rules: [
-          {
+    module: {
+      rules: [
+        {
           test: /\.js$/,
           include: path.resolve(__dirname, 'src'),
           exclude: /node_modules/,
