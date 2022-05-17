@@ -14,7 +14,6 @@ const Signup = () => {
   const [showPass, setShowPass] = useState(false)
 
   const dispatch = useDispatch()
-  const navigate = useNavigate();
 
   const handleSubmit = (e) =>{
     e.preventDefault()

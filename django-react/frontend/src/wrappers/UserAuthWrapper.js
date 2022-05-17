@@ -11,7 +11,6 @@ import {getUser} from '../state/slices/userSlice'
  */
 const UserAuthWrapper = ({unauthorized, children}) => {
     const user = useSelector(getUser)
-
     const renderChildren = unauthorized ? !(user.isLoggedIn) : user.isLoggedIn;
 
     return renderChildren ? (
