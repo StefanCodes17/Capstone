@@ -1,13 +1,12 @@
 import React, {useState, useMemo, useCallback} from 'react'
-import { createEditor, Editor, Transforms } from 'slate'
+import { createEditor, Editor, Transforms,Text } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import {AiOutlineBold, AiOutlineItalic, AiOutlineUnderline} from 'react-icons/ai'
 import {FaBold, FaItalic, FaUnderline, FaFont} from 'react-icons/fa'
-import {BiChevronDownSquare} from 'react-icons/bi'
 import {BiFont} from 'react-icons/bi'
 import { HexColorPicker } from "react-colorful";
+import isHotkey from 'is-hotkey';
 
-import Navbar from './Navbar'
 import useAutosave from '../utils/useAutosave';
 import SentimentView from '../components/SentimentView';
 
@@ -64,9 +63,13 @@ const DocEditorHeader = ({saving, msg})=>{
     </div>
   )
 }
-  
 
-
+const HOTKEYS = {
+  'mod+b': 'bold',
+  'mod+i': 'italic',
+  'mod+u': 'underline',
+  'mod+`': 'code',
+};
 
 const DocEditor = () => {
     const [fullText, setFullText]=useState("");
@@ -131,7 +134,10 @@ const DocEditor = () => {
         setFullText("");
       }
     });
-
+  // Define a leaf rendering function that is memoized with `useCallback`.
+  const renderLeaf = useCallback(props => {
+    return <Leaf {...props} />
+  }, [])
   return (
     <div style={{width: "600px", margin: "5px auto"}}>
     <DocEditorHeader saving={saving} msg={msg}/>
@@ -146,26 +152,60 @@ const DocEditor = () => {
     >
         <Editable 
           renderElement={renderElement}
+          renderLeaf={renderLeaf}
           spellCheck={true}
           onKeyDown={event => {
-            if (event.key === '`' && event.ctrlKey) {
-              event.preventDefault()
-              // Determine whether any of the currently selected blocks are code blocks.
-              const [match] = Editor.nodes(editor, {
-                match: n => n.type === 'code',
-              })
-              // Toggle the block type depending on whether there's already a match.
-              Transforms.setNodes(
-                editor,
-                { type: match ? 'paragraph' : 'code' },
-                { match: n => Editor.isBlock(editor, n) }
-              )
+            for (const hotkey in HOTKEYS) {
+                if (isHotkey(hotkey, event)) {
+                    event.preventDefault()
+                    const mark = HOTKEYS[hotkey]
+                    toggleMark(editor, mark)
+                }
             }
-          }}
+        }}
         />
       </Slate>
     </div>
   )
+}
+
+const toggleMark = (editor, format) => {
+  const isActive = isMarkActive(editor, format)
+  if (isActive) {
+      Editor.removeMark(editor, format)
+  } else {
+      Editor.addMark(editor, format, true)
+  }
+}
+
+const isMarkActive = (editor, format) => {
+  const marks = Editor.marks(editor)
+  return marks ? marks[format] === true : false
+}
+
+// Define a React component to render leaves
+const Leaf = ({ attributes, children, leaf }) => {
+  if (leaf.bold) {
+      children = <strong>{children}</strong>
+  }
+
+  if (leaf.code) {
+      children = <code>{children}</code>
+  }
+
+  if (leaf.italic) {
+    children = <em>{children}</em>
+  }
+
+  if (leaf.underline) {
+    children = <u>{children}</u>
+  }
+
+  if (leaf.strikethrough) {
+    children = <del>{children}</del>
+  }
+  
+  return <span {...attributes}>{children}</span>
 }
 
 const CodeElement = props => {
