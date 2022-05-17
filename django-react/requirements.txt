@@ -6,6 +6,7 @@ colorama
 cryptography
 drf-jwt
 Django
+django-environ
 django-cors-headers
 djangorestframework
 djangorestframework-jwt

@@ -1,0 +1,6 @@
+[client]
+user = lifepad_admin
+password = lifepad_admin499
+host = lifepad-db.cphnuisxqqyf.us-east-1.rds.amazonaws.com
+port = 3306
+name = lifepad
