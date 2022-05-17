@@ -13,6 +13,7 @@ djangorestframework-jwt
 djangorestframework-simplejwt
 idna
 joblib
+mysqlclient
 nltk
 numpy
 pandas
