@@ -125,7 +125,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': '/path/to/production_database.cnf',
+            'read_default_file': 'production_database.cnf',
         },
     }
 }
