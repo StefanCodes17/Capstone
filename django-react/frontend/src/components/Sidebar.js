@@ -3,7 +3,7 @@ import "../assets/tailwind.css"
 import api from '../../config';
 
 import DocTree from './DocTree';
-import {Link } from 'react-router-dom'
+import {Link, Navigate } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { RiAddBoxLine} from "react-icons/ri";
 import {MdCreateNewFolder} from "react-icons/md"
@@ -14,7 +14,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const CreateFolder = (document)=>{
     api.post(`/api/documents/folder/`, {
-        title: "Folder",
+        title: "Untitled Folder",
         is_root: true,
     }).then(res=>{
         toast.success("Successfully created folder!")
@@ -24,11 +24,12 @@ const CreateFolder = (document)=>{
 }
 const CreateDocument = (parent)=>{
     api.post(`/api/documents/doc/`, {
-        title: "Document",
-        content:"New document.",
+        title: "Untitled Document",
+        content: JSON.stringify([{"type":"paragraph","children":[{"text":"New Document"}]}]),
     }).then(res=>{
         toast.success("Successfully created document!")
     }).catch(err=>{
+        console.log(err)
         toast.error(`Error`)
     })
 }
@@ -70,7 +71,7 @@ const DropDown = ({anchorPoint, action, setAction, show, setShow})=>{
 }
 
 
-export default function Sidebar(){
+export default function Sidebar({files, filesStatus, action, setAction}){
     // whether hamburger menu is open or closed
     const [isOpen, setIsOpen] = useState(false);
     //Handles right click
@@ -123,7 +124,7 @@ export default function Sidebar(){
                 </p>
                 <hr className='shadow-sm fill-lifepad_black'/>
                     <p>{filesStatus}</p>
-                    <DocTree documents={files} action={action} setAction={setAction} depth={0}/>
+                    <DocTree documents={files} action={action} setAction={setAction}/>
                 </div>
                 {
                     show && (

@@ -7,10 +7,11 @@ import {TiDocumentAdd} from 'react-icons/ti'
 import toast, { Toaster } from 'react-hot-toast';
 import Tree from './DocTree'
 import api from '../../config'
+import { Navigate, Link, useSearchParams } from "react-router-dom";
 
 const CreateFolder = (parent)=>{
     api.post(`/api/documents/folder/`, {
-        title: "Folder",
+        title: "untitled Folder",
         is_root: false,
         parent_folder_id: parent.id
     }).then(res=>{
@@ -21,12 +22,13 @@ const CreateFolder = (parent)=>{
 }
 const CreateDocument = (parent)=>{
     api.post(`/api/documents/doc/`, {
-        title: "Document",
-        content:"New document.",
+        title: "Untitled Document",
+        content: JSON.stringify([{"type":"paragraph","children":[{"text":"New Document"}]}]),
         parent_folder_id: parent.id
     }).then(res=>{
         toast.success("Successfully created document!")
     }).catch(err=>{
+        console.log(err)
         toast.error(`Error`)
     })
 }
@@ -42,6 +44,7 @@ const DeleteItem = (document)=>{
 }
 
 const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
+    console.log(document)
     const docType = document.hasOwnProperty("children") ? "folder" : "doc"
     return (
         <ul
@@ -78,6 +81,16 @@ const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
                     </>
                 )
             }
+            <Link to={`/dashboard?doc_id=${document.id}`}>
+            <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
+                setAction(!action)
+                setShow(!show)
+                }}>
+                <div className="flex justify-between">
+                    <p>Open </p>
+                </div>
+            </li>
+            </Link>
             <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
                 DeleteItem(document)
                 setAction(!action)
@@ -93,7 +106,8 @@ const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
 }
 
 const Doc = ({document, action, setAction}) => {
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const docid = searchParams.get("doc_id")
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
     const [show, setShow] = useState(false);
 
@@ -112,10 +126,10 @@ const Doc = ({document, action, setAction}) => {
                 {
                 document.hasOwnProperty("children") ?  
                     //folder
-                    <Folder folder={document} key={document.id} />
+                    <Folder folder={document} key={document.id}/>
                     :
                     // make documents
-                    <Document document={document} key={document.id} action={action} setAction={setAction} />
+                    <Document document={document} key={document.id} action={action} setAction={setAction} active={document.id == docid}/>
                 }
                 {
                     show && (
@@ -127,7 +141,7 @@ const Doc = ({document, action, setAction}) => {
 }
 
 
-const Document = ({document, action, setAction})=> {
+const Document = ({document, action, setAction,active})=> {
 
     const [update, setUpdate] = useState(false)
     const [title, setTitle] = useState(document.title)
@@ -136,8 +150,7 @@ const Document = ({document, action, setAction})=> {
         const docType = document.hasOwnProperty("children") ? "folder" : "doc"
         api.put(`/api/documents/${docType}/${document.id}/`, 
         {
-            title: title,
-            content: "new doc"
+            title: title
         }
         ).then(res=>{
             toast.success(`Successfully updated ${docType}`)
@@ -172,7 +185,7 @@ const Document = ({document, action, setAction})=> {
             }}></input>
             <input type="submit" style={{display: 'none'}} /></form>
 :
-            <p>{document.title}</p>
+            <p className={`${active&& "font-bold"}`}>{document.title}</p>
         }
 
         </button>

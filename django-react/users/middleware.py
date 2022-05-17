@@ -10,7 +10,6 @@ class TokenMiddleware:
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-
         try:
             # print(f"Middleware : {request.headers.get('Authorization')}")
             access = request.headers.get('Authorization').split(' ')[1]

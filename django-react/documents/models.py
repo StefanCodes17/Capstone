@@ -18,8 +18,8 @@ class DocumentModel(models.Model):
     user_id=models.ForeignKey(User, on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
     date_modified=models.DateTimeField(auto_now=True)
-    title=models.CharField(max_length=255)
-    content=models.TextField()
+    title=models.CharField(max_length=255, blank=True)
+    content=models.TextField(blank=True)
     parent_folder_id=models.ForeignKey(FolderModel, null=True, default=None, on_delete=models.CASCADE)
 
     def __str__(self):

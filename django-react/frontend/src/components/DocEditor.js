@@ -1,5 +1,5 @@
-import React, {useState, useMemo, useCallback} from 'react'
-import { createEditor, Editor, Transforms,Text } from 'slate'
+import React, {useState, useMemo, useCallback, useEffect} from 'react'
+import { createEditor, Editor, Transforms, Text } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import {AiOutlineBold, AiOutlineItalic, AiOutlineUnderline, AiOutlineStrikethrough} from 'react-icons/ai'
 import {FaBold, FaItalic, FaUnderline, FaFont, FaStrikethrough} from 'react-icons/fa'
@@ -10,6 +10,64 @@ import isHotkey from 'is-hotkey';
 
 import useAutosave from '../utils/useAutosave';
 import SentimentView from '../components/SentimentView';
+import api from '../../config'
+
+const DocEditorHeader = ({saving, msg, document})=>{
+
+  const [bold, setBold] = useState(false)
+  const [italics, setItalics] = useState(false)
+  const [underline, setUnderline] = useState(false)
+  const [color, setColor] = useState("#aabbcc");
+  const [displayColor, setDisplayColor] = useState(false)
+
+
+  return(
+    <div>
+       <h1 className='mt-10 text-2xl'>{document ? document.title : "Example" }</h1>
+      <div className='pt-5 pb-2'>
+        <p className='text-sm text-gray-500 tracking-wide'>{saving ? 'Saving ...' : msg}</p>
+      </div>
+      <div className='flex'>
+        {/* Type of text */}
+        <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
+          <option value="paragraph">Paragraph</option>
+          <option value="title">Title</option>
+        </select>
+        {/* Type of font */}
+        <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
+          <option value="Arial">Arial</option>
+          <option value="Comic Sans">Comic Sans</option>
+        </select>
+        {/* Font size */}
+        <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 56, 58, 60, 62, 64, 66, 68, 70, 72].map((num) =>(
+            <option value={num}>{num}px</option>
+          ))}
+        </select>
+        <div className="px-6 py-1 border border-lifepad_black focus:outline-none flex w-fit">
+            <div className="flex pt-1 space-x-2">
+              <div  className='cursor-pointer' onClick={()=> setBold(!bold)}>{!bold ? <AiOutlineBold/> : <FaBold/>}</div>
+              <div  className='cursor-pointer' onClick={() => setItalics(!italics)}>{!italics ? <AiOutlineItalic/> : <FaItalic/>} </div>
+              <div  className='cursor-pointer' onClick={() => setUnderline(!underline)}>{!underline ? <AiOutlineUnderline/> : <FaUnderline/>} </div>
+            </div>
+        </div>
+        <div className="px-6 py-1 border border-lifepad_black focus:outline-none flex w-fit">
+          {/*Color Picker */}
+          <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
+            {!displayColor ? <BiFont/> : <FaFont/>}
+            <div className='w-6 h-1' style={{backgroundColor: color}}></div>
+            {displayColor &&
+            <div className='absolute -bottom-52 left-0'>
+                <HexColorPicker color={color} onChange={setColor} />
+            </div>}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+  
+
 
 const HOTKEYS = {
   'mod+b': 'bold',
@@ -20,11 +78,21 @@ const HOTKEYS = {
   'mod+w': 'sans'
 };
 
-const DocEditor = () => {
+const DocEditor = ({doc_id}) => {
     const [fullText, setFullText]=useState("");
     const [selectedText,setSelectedText] = useState("")
     const [saving, setSaving] = useState(true)
     const [msg, setMsg] = useState("")
+    const [document, setDocument] = useState(null)
+    const [content, setContent] = useState("")
+
+        
+    useEffect(()=>{
+      api.get(`/api/documents/doc/${doc_id}`).then(res=>{
+        setDocument(res.data)
+      })
+      return ()=> setDocument(null)
+    }, [doc_id])
     const [toggleSpellCheck, setToggleSpellCheck]=useState(true)
     const [color, setColor] = useState("#aabbcc");
     const [displayColor, setDisplayColor] = useState(false)
@@ -42,19 +110,18 @@ const DocEditor = () => {
       }, [])
 
     const editor = useMemo(() => withReact(createEditor()), []);
-
     //Initial editor contents
-    const loadedData = useMemo(() => 
-      JSON.parse(window.localStorage.getItem("doc")) || [
+    const loadedData = useCallback(() => 
+      document?.content || [
         {
           type: 'paragraph',
-          children: [{ text: 'Welcome to Life Pad!' }],
+          children: [{ text: "Please select a document from the sidebar to begin editing" }],
         },
       ],
-      []
+      [document, doc_id]
     );
-
-    const [value, setValue] = useAutosave(loadedData, (res)=>{
+    
+    const [value, setValue] = useAutosave({loadedData, doc_id: doc_id}, (res)=>{
       const mssg = res?.data?.message
       setMsg(mssg)
       setSaving(!saving)
@@ -96,13 +163,14 @@ const DocEditor = () => {
 
   return (
     <div style={{width: "600px", margin: "5px auto"}}>
-    {/* <DocEditorHeader saving={saving} msg={msg}/> */}
+    <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
+    {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}
     
     
-
-    <Slate
+    {document && (
+      <Slate
       editor={editor}
-      value={value}
+      value={JSON.parse(document.content)}
       onChange={ onChangeContent}
     > 
         {/* Toolbar */}
@@ -184,6 +252,7 @@ const DocEditor = () => {
         {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}
 
         <Editable 
+          readOnly={doc_id == null}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           spellCheck={toggleSpellCheck}
@@ -206,6 +275,7 @@ const DocEditor = () => {
         }}
         />
       </Slate>
+    )}
     </div>
   )
 }

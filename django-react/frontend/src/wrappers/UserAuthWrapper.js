@@ -1,7 +1,7 @@
-import React from 'react'
-import {useSelector} from "react-redux"
+import React, { useState, useEffect } from 'react'
+import {useSelector, useDispatch} from "react-redux"
 import { Navigate } from 'react-router-dom'
-import {getUser} from '../state/slices/userSlice'
+import {getUser, fetchUser} from '../state/slices/userSlice'
 
 
 /**
@@ -10,8 +10,11 @@ import {getUser} from '../state/slices/userSlice'
  *   false: children will be rendered only if you ARE logged in
  */
 const UserAuthWrapper = ({unauthorized, children}) => {
+    // Checks if user is logged in already
     const user = useSelector(getUser)
+
     const renderChildren = unauthorized ? !(user.isLoggedIn) : user.isLoggedIn;
+
 
     return renderChildren ? (
         {...children}
