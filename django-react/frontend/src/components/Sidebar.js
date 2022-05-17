@@ -79,7 +79,22 @@ export default function Sidebar({files, filesStatus, action, setAction}){
     const [show, setShow] = useState(false);
     // logged in user
     const user = useSelector(getUser);
-    
+    const [files, setFiles] = useState([]); //contains actual tree structure
+    const [filesStatus, setFilesStatus] = useState("Loading..."); //status message for files
+    //Handle updating files
+    const [action, setAction] = useState(false)
+    // Load folders and documents
+    useEffect(() => {
+        api.get('/api/documents/tree').then((response) => { //success
+            if(response.status == 200) {
+                setFiles(response.data);
+                setFilesStatus("");
+            }
+        }).catch(error => { //failure
+            setFilesStatus("Failed to fetch your files. Try reloading the page.");
+        });
+    }, [action]);
+
     return(
         <div 
         style={{position: "absolute"}}

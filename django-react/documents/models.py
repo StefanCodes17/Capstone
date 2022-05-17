@@ -1,3 +1,4 @@
+from operator import truediv
 from django.db import models
 from users.models import User
 # Create your models here.
@@ -26,7 +27,7 @@ class DocumentModel(models.Model):
 
 class SentimentModel(models.Model):
     query_string=models.CharField(max_length=2000,default="")
-    raw_score=models.FloatField(default=0) 
+    raw_score=models.FloatField(default=0,null=True) 
     sentiment=models.CharField(max_length=100,default='Neutral')
 
 class SpellCheckModel(models.Model):
