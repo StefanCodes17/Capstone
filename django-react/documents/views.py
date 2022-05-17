@@ -17,12 +17,8 @@ from collections import defaultdict
 def get_user(request):
     #try:
     access = request.headers.get('Authorization').split(' ')[1]
-    print(f'ACCESS = {access}')
-    #access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUxOTYxMTk5LCJpYXQiOjE2NTE5NTg0OTksImp0aSI6ImI0ZDhiNTY1NjcyZTRjYTE4MzMxZGFjYmZkNTFjMmFkIiwidXNlcl9pZCI6MX0.0Odx7_DQ1EVrcklDS4T-Ty4mLWSnsc_GbW8aC6vE22E"
     user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
-    print(user_id)
     user = User.objects.get(id=user_id)
-    print(user)
     return user
     #except:
         #print(f'ACCESS = NOTHING')
