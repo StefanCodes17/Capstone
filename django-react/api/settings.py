@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+import environ
+
+# Load environment variables
+env = environ.Env(DEBUG=(bool, True), PRODUCTION=(bool, False))
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-za^gg1e=j2gd!brxuuy(g8$xm764_wue%@2(q9l1y6#uvf+(!j'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['54.225.20.174']
 
 
 # Application definition
@@ -127,6 +132,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+if env('PRODUCTION'):
+    DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+    DATABASES['default']['NAME'] = env('DB_NAME')
+    DATABASES['default']['HOST'] = env('DB_HOST')
+    DATABASES['default']['USER'] = env('DB_USER')
+    DATABASES['default']['PASSWORD'] = env('DB_PASSWORD')
+    DATABASES['default']['PORT'] = env('DB_PORT')
 
 
 # Password validation
