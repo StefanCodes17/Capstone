@@ -92,7 +92,7 @@ export default function Sidebar(){
         }).catch(error => { //failure
             setFilesStatus("Failed to fetch your files. Try reloading the page.");
         });
-    }, [action, files]);
+    }, [action]);
 
     return(
         <div 

@@ -16,7 +16,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 import jwt
 from decouple import config
-import pprint
 from documents.serializers import DocumentSerializer, FolderSerializer
 
 
@@ -68,7 +67,7 @@ class GetUser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         access = request.headers.get('Authorization').split(' ')[1]
-        print("Get access token:", access)
+        # print("Get access token:", access)
         user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
         #user = User.objects.get(id=user_id)
         user = request.lifepad_user
