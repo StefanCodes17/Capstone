@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react'
+import React, {useState, useMemo, useCallback, useEffect} from 'react'
 import { createEditor, Editor, Transforms } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import {AiOutlineBold, AiOutlineItalic, AiOutlineUnderline} from 'react-icons/ai'
@@ -10,8 +10,10 @@ import { HexColorPicker } from "react-colorful";
 import Navbar from './Navbar'
 import useAutosave from '../utils/useAutosave';
 import SentimentView from '../components/SentimentView';
+import api from '../../config'
 
-const DocEditorHeader = ({saving, msg})=>{
+
+const DocEditorHeader = ({saving, msg, document})=>{
 
   const [bold, setBold] = useState(false)
   const [italics, setItalics] = useState(false)
@@ -22,7 +24,8 @@ const DocEditorHeader = ({saving, msg})=>{
 
   return(
     <div>
-      <div className='pt-10 pb-2'>
+       <h1 className='mt-10 text-2xl'>{document ? document.title : "Example" }</h1>
+      <div className='pt-5 pb-2'>
         <p className='text-sm text-gray-500 tracking-wide'>{saving ? 'Saving ...' : msg}</p>
       </div>
       <div className='flex'>
@@ -68,11 +71,21 @@ const DocEditorHeader = ({saving, msg})=>{
 
 
 
-const DocEditor = () => {
+const DocEditor = ({doc_id}) => {
     const [fullText, setFullText]=useState("");
     const [selectedText,setSelectedText] = useState("")
     const [saving, setSaving] = useState(true)
     const [msg, setMsg] = useState("")
+    const [document, setDocument] = useState(null)
+    const [content, setContent] = useState("")
+
+        
+    useEffect(()=>{
+      api.get(`/api/documents/doc/${doc_id}`).then(res=>{
+        setDocument(res.data)
+      })
+      return ()=> setDocument(null)
+    }, [doc_id])
 
     const renderElement = useCallback(props => {
         switch (props.element.type) {
@@ -84,19 +97,18 @@ const DocEditor = () => {
       }, [])
 
     const editor = useMemo(() => withReact(createEditor()), []);
-
     //Initial editor contents
-    const loadedData = useMemo(() => 
-      JSON.parse(window.localStorage.getItem("doc")) || [
+    const loadedData = useCallback(() => 
+      document?.content || [
         {
           type: 'paragraph',
-          children: [{ text: 'Welcome to Life Pad!' }],
+          children: [{ text: "Please select a document from the sidebar to begin editing" }],
         },
       ],
-      []
+      [document, doc_id]
     );
-
-    const [value, setValue] = useAutosave(loadedData, (res)=>{
+    
+    const [value, setValue] = useAutosave({loadedData, doc_id: doc_id}, (res)=>{
       const mssg = res?.data?.message
       setMsg(mssg)
       setSaving(!saving)
@@ -134,17 +146,19 @@ const DocEditor = () => {
 
   return (
     <div style={{width: "600px", margin: "5px auto"}}>
-    <DocEditorHeader saving={saving} msg={msg}/>
+    <DocEditorHeader saving={saving} msg={msg} document={document}/>
     <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
     {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}
     
 
-    <Slate
+    {document && (
+      <Slate
       editor={editor}
-      value={value}
+      value={JSON.parse(document.content)}
       onChange={ onChangeContent}
     >
         <Editable 
+          readOnly={doc_id == null}
           renderElement={renderElement}
           spellCheck={true}
           onKeyDown={event => {
@@ -164,6 +178,7 @@ const DocEditor = () => {
           }}
         />
       </Slate>
+    )}
     </div>
   )
 }
