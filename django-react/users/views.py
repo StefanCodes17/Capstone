@@ -16,8 +16,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 import jwt
 from decouple import config
-import pprint
 from documents.serializers import DocumentSerializer, FolderSerializer
+
 
 
 def intro_doc(request):
@@ -31,15 +31,15 @@ def intro_doc(request):
     
     doc_data = {
             'title': 'Welcome',
-            'content': 'Welcome to LifePad! Here you can get started by creating a document or folder. Have fun creating your life stories with LifePad!'
+            'content': [{"type":"paragraph","children":[{"text":'Welcome to LifePad! Here you can get started by creating a document or folder. Have fun creating your life stories with LifePad!'}]}]
         }
     doc_data2 = {
             'title': 'Sample Document in Sub-Folder',
-            'content': 'As you can see, the ability of creating subfolders is in the power of your hands. Take this opportunity to make your life more organized!',
+            'content': [{"type":"paragraph","children":[{"text":'Welcome to LifePad! Here you can get started by creating a document or folder. Have fun creating your life stories with LifePad!'}]}]
         }
     doc_data3 = {
             'title': 'Sample Document in Folder',
-            'content': 'The ability of creating documents within a folder is in the power of your hands. Take this opportunity to make your life more organized!',
+            'content': [{"type":"paragraph","children":[{"text":'Welcome to LifePad! Here you can get started by creating a document or folder. Have fun creating your life stories with LifePad!'}]}],
         }
     
     folder_serializer = FolderSerializer(data=folder_data)
@@ -68,7 +68,7 @@ class GetUser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         access = request.headers.get('Authorization').split(' ')[1]
-        print("Get access token:", access)
+        # print("Get access token:", access)
         user_id = jwt.decode(access, getattr(settings, "SECRET_KEY", None), getattr(settings, "SIMPLE_JWT")["ALGORITHM"])["user_id"]
         #user = User.objects.get(id=user_id)
         user = request.lifepad_user
@@ -108,6 +108,7 @@ class RegisterView(generics.GenericAPIView):
         token= RefreshToken.for_user(user)
 
         current_site=get_current_site(request).domain
+        print(current_site)
         relative_link= reverse('email_verify')
         absurl='http://' + current_site + relative_link +"?token=" + str(token)
         
