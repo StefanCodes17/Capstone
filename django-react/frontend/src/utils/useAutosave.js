@@ -25,7 +25,7 @@ export default function useAutosave({loadedData, doc_id}, callback) {
 			callback({
 				status:400,
 				data:{
-					message: "Failed to save document"
+					message: "Failed to save"
 				}
 			})
 		})

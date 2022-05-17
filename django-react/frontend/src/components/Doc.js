@@ -44,7 +44,6 @@ const DeleteItem = (document)=>{
 }
 
 const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
-    console.log(document)
     const docType = document.hasOwnProperty("children") ? "folder" : "doc"
     return (
         <ul
@@ -61,7 +60,7 @@ const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
                             <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
                         setShow(!show)
                         CreateFolder(document)
-                        setAction(!action)
+                        setAction(action + 1 % 10)
                         }}>
                         <div className="flex space-x-10">
                             <p>Create Folder</p>
@@ -71,7 +70,7 @@ const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
                     <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
                         setShow(!show)
                         CreateDocument(document)
-                        setAction(!action)
+                        setAction(action + 1 % 10)
                         }}>
                         <div className="flex justify-between">
                             <p>Create Document</p>
@@ -83,7 +82,7 @@ const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
             }
             <Link to={`/dashboard?doc_id=${document.id}`}>
             <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
-                setAction(!action)
+                setAction(action + 1 % 10)
                 setShow(!show)
                 }}>
                 <div className="flex justify-between">
@@ -93,7 +92,7 @@ const DropDown = ({anchorPoint, document, action, setAction, show, setShow})=>{
             </Link>
             <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
                 DeleteItem(document)
-                setAction(!action)
+                setAction(action + 1 % 10)
                 setShow(!show)
                 }}>
                 <div className="flex justify-between">
@@ -175,8 +174,9 @@ const Document = ({document, action, setAction,active})=> {
                 e.preventDefault()
                 updateDocument(document)
                 setUpdate(!update)
-                setAction(!action)
+                setAction(action + 1 % 10)
             }}><input 
+            autoFocus={true}
             type="text"
             className="hover:outline-none hover:text-black"
             value ={title}
@@ -185,7 +185,7 @@ const Document = ({document, action, setAction,active})=> {
             }}></input>
             <input type="submit" style={{display: 'none'}} /></form>
 :
-            <p className={`${active&& "font-bold"}`}>{document.title}</p>
+            <p className={`${active&& "font-bold"}`}>{title}</p>
         }
 
         </button>
@@ -194,19 +194,58 @@ const Document = ({document, action, setAction,active})=> {
 
 const Folder = ({folder})=>{
     const[open,setOpen] = useState(false);
+    const [update, setUpdate] = useState(false)
     const handleClick = ()=> {setOpen(!open);};
+    const [title, setTitle] = useState(folder.title)
 
+    const updateFolder = ()=>{
+        const docType = folder.hasOwnProperty("children") ? "folder" : "doc"
+        api.put(`/api/documents/${docType}/${folder.id}/`, 
+        {
+            title: title
+        }
+        ).then(res=>{
+            toast.success(`Successfully updated ${docType}`)
+        }).catch(err=>{
+            toast.error(`Error`)
+        })
+    }
     return(
     <div> 
         <button 
         onClick={handleClick} 
+        onDoubleClick={()=>{
+            setUpdate(true)
+            
+        }}
+        onMouseLeave={()=>{
+            setUpdate(false)
+        }}
         type="button" 
         className="document inline-flex w-64 px-5 mr-5 text-sm font-small bg text-lifepad_black drop-shadow-sm hover:bg-lifepad_green hover:text-white hover:shadow-inner align-baseline">
             {
                 open ? <MdExpandMore className="w-4 h-4 pt-1"/> : <MdExpandMore className="w-4 h-4 pt-1 -rotate-90"/>
             }
             <HiOutlineFolder  className="w-4 h-4 pt-1 mr-2" />
-            {folder.title}
+            {
+                update ? 
+                <form             
+                onSubmit={(e)=>{
+                    e.preventDefault()
+                    updateFolder(folder)
+                    setUpdate(!update)
+                    setAction(action + 1 % 10)
+                }}><input 
+                autoFocus={true}
+                type="text"
+                className="hover:outline-none hover:text-black"
+                value ={title}
+                onChange={(e)=>{
+                    setTitle(e.target.value)
+                }}></input>
+                <input type="submit" style={{display: 'none'}} /></form>
+                :<p>{title}</p>
+            }
         </button>
        {
          open && <Tree documents={folder.children}/> 
