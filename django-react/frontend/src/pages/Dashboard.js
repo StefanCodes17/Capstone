@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [files, setFiles] = useState([]); //contains actual tree structure
     const [filesStatus, setFilesStatus] = useState("Loading..."); //status message for files
     //Handle updating files
-    const [action, setAction] = useState(false)
+    const [action, setAction] = useState(0)
     // Load folders and documents
     useEffect(() => {
         api.get('/api/documents/tree').then((response) => { //success

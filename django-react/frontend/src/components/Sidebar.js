@@ -49,7 +49,7 @@ const DropDown = ({anchorPoint, action, setAction, show, setShow})=>{
             <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
                 setShow(!show)
                 CreateFolder()
-                setAction(!action)
+                setAction(action + 1 % 10)
                 }}>
                 <div className="flex space-x-10">
                     <p>Create Folder</p>
@@ -59,7 +59,7 @@ const DropDown = ({anchorPoint, action, setAction, show, setShow})=>{
             <li className="hover:bg-slate-200 cursor-pointer py-1 px-3" onClick={()=> {
                 setShow(!show)
                 CreateDocument()
-                setAction(!action)
+                setAction(action + 1 % 10)
                 }}>
                 <div className="flex justify-between">
                     <p>Create Document</p>
@@ -79,21 +79,7 @@ export default function Sidebar({files, filesStatus, action, setAction}){
     const [show, setShow] = useState(false);
     // logged in user
     const user = useSelector(getUser);
-    const [files, setFiles] = useState([]); //contains actual tree structure
-    const [filesStatus, setFilesStatus] = useState("Loading..."); //status message for files
-    //Handle updating files
-    const [action, setAction] = useState(false)
-    // Load folders and documents
-    useEffect(() => {
-        api.get('/api/documents/tree').then((response) => { //success
-            if(response.status == 200) {
-                setFiles(response.data);
-                setFilesStatus("");
-            }
-        }).catch(error => { //failure
-            setFilesStatus("Failed to fetch your files. Try reloading the page.");
-        });
-    }, [action]);
+
 
     return(
         <div 

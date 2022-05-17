@@ -1,6 +1,6 @@
-import React, {useState, useMemo, useCallback, useEffect} from 'react'
+import React, {useState, useMemo, useCallback, useEffect, useRef} from 'react'
 import { createEditor, Editor, Transforms, Text } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import { Slate, Editable, withReact, } from 'slate-react'
 import {AiOutlineBold, AiOutlineItalic, AiOutlineUnderline, AiOutlineStrikethrough} from 'react-icons/ai'
 import {FaBold, FaItalic, FaUnderline, FaFont, FaStrikethrough} from 'react-icons/fa'
 import {MdOutlineSpellcheck} from 'react-icons/md'
@@ -84,14 +84,18 @@ const DocEditor = ({doc_id}) => {
     const [saving, setSaving] = useState(true)
     const [msg, setMsg] = useState("")
     const [document, setDocument] = useState(null)
-    const [content, setContent] = useState("")
+    const [editor] = useState(withReact(createEditor()))
 
         
     useEffect(()=>{
       api.get(`/api/documents/doc/${doc_id}`).then(res=>{
         setDocument(res.data)
+        Transforms.select(editor, {path: [0, 0], offset: 0});
+
       })
-      return ()=> setDocument(null)
+      return ()=> {
+        setDocument(null)
+      }
     }, [doc_id])
     const [toggleSpellCheck, setToggleSpellCheck]=useState(true)
     const [color, setColor] = useState("#aabbcc");
@@ -108,9 +112,8 @@ const DocEditor = ({doc_id}) => {
             return <DefaultElement {...props} />
         }
       }, [])
-
-    const editor = useMemo(() => withReact(createEditor()), []);
-    //Initial editor contents
+ 
+    //Initial editor contents 
     const loadedData = useCallback(() => 
       document?.content || [
         {
@@ -163,20 +166,11 @@ const DocEditor = ({doc_id}) => {
 
   return (
     <div style={{width: "600px", margin: "5px auto"}}>
-    <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
-    {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}
     
-    
-    {document && (
-      <Slate
-      editor={editor}
-      value={JSON.parse(document.content)}
-      onChange={ onChangeContent}
-    > 
-        {/* Toolbar */}
-        <div>
-          <div className='pt-10 pb-2'>
-            <p className='text-sm text-gray-500 tracking-wide'>{saving ? 'Saving ...' : msg}</p>
+    <h3 className="mt-10 text-2xl">{document ? document?.title : "Example Title"}</h3> 
+    <div>
+          <div className='pt-2 pb-2'>
+            {document && <p className='text-sm text-gray-500 tracking-wide'>{saving ? 'Saving ...' : msg}</p>}
           </div>
           <div className='flex'>
             {/* Type of text */}
@@ -247,9 +241,21 @@ const DocEditor = ({doc_id}) => {
             </div>
           </div>
         </div>
+      {!document && <div>Open a document to start using the editor!</div>}
+    
+      {document && 
+      <Slate
+      editor={editor}
+      value={document ? JSON.parse(document.content) : [{"type":"paragraph","children":[{"text":""}]}]}
+      onChange={ onChangeContent}
+    > 
         {/* Sentiment Analysis */}
-        <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
-        {selectedText && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>}
+        {document &&
+          <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={fullText} sentimentType="All"/>
+        }
+        {
+          selectedText && document && <SentimentView className="z-100 left-[70px] top-[40px]" sentimentSentence={selectedText} sentimentType="Selected"/>
+        }
 
         <Editable 
           readOnly={doc_id == null}
@@ -274,8 +280,7 @@ const DocEditor = ({doc_id}) => {
             }
         }}
         />
-      </Slate>
-    )}
+      </Slate>}
     </div>
   )
 }
