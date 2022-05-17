@@ -3,6 +3,7 @@ import { createEditor, Editor, Transforms,Text } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import {AiOutlineBold, AiOutlineItalic, AiOutlineUnderline, AiOutlineStrikethrough} from 'react-icons/ai'
 import {FaBold, FaItalic, FaUnderline, FaFont, FaStrikethrough} from 'react-icons/fa'
+import {MdOutlineSpellcheck} from 'react-icons/md'
 import {BiFont} from 'react-icons/bi'
 import { HexColorPicker } from "react-colorful";
 import isHotkey from 'is-hotkey';
@@ -15,7 +16,8 @@ const HOTKEYS = {
   'mod+i': 'italic',
   'mod+u': 'underline',
   'mod+`': 'code',
-  'mod+d': 'strikethrough'
+  'mod+d': 'strikethrough',
+  'mod+w': 'sans'
 };
 
 const DocEditor = () => {
@@ -23,6 +25,7 @@ const DocEditor = () => {
     const [selectedText,setSelectedText] = useState("")
     const [saving, setSaving] = useState(true)
     const [msg, setMsg] = useState("")
+    const [toggleSpellCheck, setToggleSpellCheck]=useState(true)
     const [color, setColor] = useState("#aabbcc");
     const [displayColor, setDisplayColor] = useState(false)
     
@@ -114,8 +117,8 @@ const DocEditor = () => {
               <option value="title">Title</option>
             </select>
             {/* Type of font */}
-            <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none">
-              <option value="Arial">Arial</option>
+            <select name="type" id="type" className="px-6 py-1 border border-lifepad_black focus:outline-none" >
+              <option value="sans">Ariel</option>
               <option value="Comic Sans">Comic Sans</option>
             </select>
             {/* Font size */}
@@ -156,15 +159,22 @@ const DocEditor = () => {
                   </div>
                 </div>
             </div>
-            <div className="px-6 py-1 border border-lifepad_black focus:outline-none flex w-fit">
+            <div className="px-4 py-1 border border-lifepad_black focus:outline-none flex w-fit">
               {/*Color Picker */}
-              <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
+              {/* <div className='grid place-items-center relative' onClick={() => setDisplayColor(!displayColor)}>
                 {!displayColor ? <BiFont/> : <FaFont/>}
                 <div className='w-6 h-1' style={{backgroundColor: color}}></div>
                 {displayColor &&
                 <div className='absolute -bottom-52 left-0'>
                     <HexColorPicker color={color} onChange={setColor} />
                 </div>}
+              </div> */}
+              <div  className='cursor-pointer pt-1 space-x-2' onMouseDown={(event) => {
+                      event.preventDefault();
+                      setToggleSpellCheck(!toggleSpellCheck)
+                    }
+                  }>
+                    {toggleSpellCheck? <MdOutlineSpellcheck className=' fill-lifepad_green'/> : <MdOutlineSpellcheck/>} 
               </div>
             </div>
           </div>
@@ -176,7 +186,7 @@ const DocEditor = () => {
         <Editable 
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          spellCheck={true}
+          spellCheck={toggleSpellCheck}
           autoFocus
           onKeyDown={event => {
             //Hotkey to select all text
@@ -235,7 +245,6 @@ const Leaf = ({ attributes, children, leaf }) => {
   if (leaf.strikethrough) {
     children = <del>{children}</del>
   }
-  
   return <span {...attributes}>{children}</span>
 }
 
