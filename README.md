@@ -1,5 +1,7 @@
 # Capstone
 
+> **_NOTE:_** A .env file is required to run this application. It is not provided for security reasons.
+
 # Installation
 
 1. Clone this repository
